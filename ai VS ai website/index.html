@@ -1,0 +1,3825 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Arena: The Ultimate Idea Battle</title>
+  <meta name="description" content="Witness high-stakes debates between two AI titans powered by Groq API in any language on the planet. Experience realistic speech synthesis, dynamic scoring, and fair AI Referee verdicts.">
+
+  <!-- Google Fonts: Outfit & Orbitron -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Outfit', 'sans-serif'],
+            display: ['Orbitron', 'sans-serif'],
+          },
+          colors: {
+            arena: {
+              bg: '#050814',
+              card: 'rgba(10, 19, 41, 0.78)',
+              border: 'rgba(56, 189, 248, 0.18)',
+              alpha: '#f43f5e',
+              alphaGlow: 'rgba(244, 63, 94, 0.45)',
+              beta: '#06b6d4',
+              betaGlow: 'rgba(6, 182, 212, 0.45)',
+              judge: '#f59e0b',
+              judgeGlow: 'rgba(245, 158, 11, 0.45)',
+              cyanGlow: 'rgba(56, 189, 248, 0.35)',
+              navy: '#081126',
+              navyDark: '#040711'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* ==========================================================================
+       AI ARENA - Genius Dark-Blue AI Design System (Public Edition)
+       ========================================================================== */
+
+    :root, html.dark {
+      --bg-canvas: #050814;
+      --bg-header: rgba(6, 11, 26, 0.88);
+      --border-header: rgba(56, 189, 248, 0.16);
+      --card-bg: rgba(10, 19, 41, 0.76);
+      --card-border: rgba(56, 189, 248, 0.18);
+      --card-shadow: 0 20px 45px -10px rgba(1, 4, 18, 0.85), 0 0 25px -5px rgba(56, 189, 248, 0.08);
+      --input-bg: rgba(6, 13, 31, 0.85);
+      --input-border: rgba(56, 189, 248, 0.22);
+      --input-text: #f1f5f9;
+      --text-main: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --orb-opacity: 0.38;
+      --badge-bg: rgba(15, 27, 58, 0.8);
+      --badge-border: rgba(56, 189, 248, 0.32);
+      --preset-bg: rgba(14, 27, 58, 0.65);
+      --preset-hover: rgba(26, 48, 98, 0.85);
+      --preset-text: #bae6fd;
+      --control-bg: rgba(11, 22, 48, 0.85);
+      --control-border: rgba(56, 189, 248, 0.24);
+      --control-text: #e2e8f0;
+      --stat-card-bg: rgba(8, 16, 36, 0.65);
+    }
+
+    body {
+      background-color: var(--bg-canvas);
+      color: var(--text-main);
+      font-family: 'Outfit', sans-serif;
+      overflow-x: hidden;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Ambient Glow Mesh */
+    .bg-orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      z-index: 0;
+      pointer-events: none;
+      opacity: var(--orb-opacity);
+      transition: opacity 0.4s ease;
+      animation: float 22s infinite ease-in-out alternate;
+    }
+    .orb-alpha {
+      width: 580px;
+      height: 580px;
+      background: radial-gradient(circle, rgba(244, 63, 94, 0.8), rgba(49, 46, 129, 0.4));
+      top: -140px;
+      left: -140px;
+    }
+    .orb-beta {
+      width: 580px;
+      height: 580px;
+      background: radial-gradient(circle, rgba(2, 132, 199, 0.8), rgba(6, 182, 212, 0.4));
+      top: 30%;
+      right: -140px;
+      animation-delay: -8s;
+    }
+    .orb-center {
+      width: 520px;
+      height: 520px;
+      background: radial-gradient(circle, rgba(3, 105, 161, 0.6), rgba(30, 27, 75, 0.4));
+      bottom: -150px;
+      left: 28%;
+      animation-delay: -15s;
+    }
+
+    @keyframes float {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(45px, 35px) scale(1.06); }
+      100% { transform: translate(-35px, -45px) scale(0.96); }
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.4);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(148, 163, 184, 0.7);
+    }
+
+    /* Active Speaker Glow Effects */
+    .active-speaker-alpha {
+      box-shadow: 0 0 35px rgba(244, 63, 94, 0.7), inset 0 0 15px rgba(244, 63, 94, 0.35);
+      border-color: #f43f5e !important;
+      animation: pulse-speaker-alpha 1.8s infinite ease-in-out;
+    }
+    @keyframes pulse-speaker-alpha {
+      0%, 100% { box-shadow: 0 0 20px rgba(244, 63, 94, 0.5), inset 0 0 10px rgba(244, 63, 94, 0.25); }
+      50% { box-shadow: 0 0 40px rgba(244, 63, 94, 0.9), inset 0 0 25px rgba(244, 63, 94, 0.5); }
+    }
+
+    .active-speaker-beta {
+      box-shadow: 0 0 35px rgba(6, 182, 212, 0.7), inset 0 0 15px rgba(6, 182, 212, 0.35);
+      border-color: #06b6d4 !important;
+      animation: pulse-speaker-beta 1.8s infinite ease-in-out;
+    }
+    @keyframes pulse-speaker-beta {
+      0%, 100% { box-shadow: 0 0 20px rgba(6, 182, 212, 0.5), inset 0 0 10px rgba(6, 182, 212, 0.25); }
+      50% { box-shadow: 0 0 40px rgba(6, 182, 212, 0.9), inset 0 0 25px rgba(6, 182, 212, 0.5); }
+    }
+
+    /* Soundwave Equalizer Bars */
+    .sound-bar {
+      display: inline-block;
+      width: 3.5px;
+      height: 14px;
+      margin: 0 1.5px;
+      border-radius: 2px;
+      background-color: currentColor;
+      transition: height 0.1s ease;
+    }
+    .sound-animated .sound-bar:nth-child(1) { animation: soundBounce 0.6s infinite ease-in-out alternate; }
+    .sound-animated .sound-bar:nth-child(2) { animation: soundBounce 0.8s infinite ease-in-out alternate 0.2s; }
+    .sound-animated .sound-bar:nth-child(3) { animation: soundBounce 0.5s infinite ease-in-out alternate 0.4s; }
+    .sound-animated .sound-bar:nth-child(4) { animation: soundBounce 0.7s infinite ease-in-out alternate 0.1s; }
+    .sound-animated .sound-bar:nth-child(5) { animation: soundBounce 0.65s infinite ease-in-out alternate 0.3s; }
+
+    @keyframes soundBounce {
+      0% { height: 4px; }
+      100% { height: 24px; }
+    }
+
+    /* Theme Adaptive Classes */
+    .app-header {
+      background: var(--bg-header);
+      border-bottom: 1px solid var(--border-header);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      box-shadow: var(--card-shadow);
+      transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .glass-input {
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      color: var(--input-text);
+      transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .glass-input:focus {
+      border-color: #8b5cf6;
+      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+    }
+    .preset-btn {
+      background: var(--preset-bg);
+      color: var(--preset-text);
+      border: 1px solid var(--card-border);
+      transition: all 0.2s ease;
+    }
+    .preset-btn:hover {
+      background: var(--preset-hover);
+      color: var(--text-main);
+    }
+    .ctrl-btn {
+      background: var(--control-bg);
+      border: 1px solid var(--control-border);
+      color: var(--control-text);
+      transition: all 0.2s ease;
+    }
+    .ctrl-btn:hover {
+      background: var(--preset-hover);
+      color: var(--text-main);
+    }
+    .stat-card {
+      background: var(--stat-card-bg);
+      border: 1px solid var(--card-border);
+    }
+  
+    /* ==========================================================================
+       Light Mode Comprehensive Elegance Overrides
+       ========================================================================== */
+    html:not(.dark) body {
+      background-color: #f8fafc !important;
+      color: #0f172a !important;
+    }
+    html:not(.dark) .app-header {
+      background: rgba(255, 255, 255, 0.9) !important;
+      border-bottom: 1px solid #e2e8f0 !important;
+    }
+    html:not(.dark) .glass-card {
+      background: #ffffff !important;
+      border: 1px solid #e2e8f0 !important;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02) !important;
+    }
+    html:not(.dark) .glass-input {
+      background: #f8fafc !important;
+      border: 1px solid #cbd5e1 !important;
+      color: #0f172a !important;
+    }
+    html:not(.dark) .glass-input:focus {
+      background: #ffffff !important;
+      border-color: #6366f1 !important;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15) !important;
+    }
+    html:not(.dark) .glass-input::placeholder {
+      color: #94a3b8 !important;
+    }
+    html:not(.dark) h1, html:not(.dark) h2, html:not(.dark) h3, html:not(.dark) h4 {
+      color: #0f172a;
+    }
+    html:not(.dark) .text-slate-200, html:not(.dark) .text-slate-100 {
+      color: #1e293b !important;
+    }
+    html:not(.dark) .text-slate-300 {
+      color: #334155 !important;
+    }
+    html:not(.dark) .text-slate-400 {
+      color: #64748b !important;
+    }
+    html:not(.dark) .text-slate-500 {
+      color: #64748b !important;
+    }
+    html:not(.dark) .bg-slate-900,
+    html:not(.dark) .bg-slate-900/50,
+    html:not(.dark) .bg-slate-900/60,
+    html:not(.dark) .bg-slate-900/70,
+    html:not(.dark) .bg-slate-900/80,
+    html:not(.dark) .bg-slate-950,
+    html:not(.dark) .bg-slate-950/60,
+    html:not(.dark) .bg-slate-950/75,
+    html:not(.dark) .bg-slate-950/80 {
+      background-color: #f1f5f9 !important;
+      border-color: #e2e8f0 !important;
+    }
+    html:not(.dark) .bg-slate-800,
+    html:not(.dark) .bg-slate-800/70,
+    html:not(.dark) .bg-slate-800/80 {
+      background-color: #e2e8f0 !important;
+      border-color: #cbd5e1 !important;
+      color: #1e293b !important;
+    }
+    html:not(.dark) .border-slate-800,
+    html:not(.dark) .border-slate-800/80 {
+      border-color: #e2e8f0 !important;
+    }
+    html:not(.dark) .border-slate-700,
+    html:not(.dark) .border-slate-700/50,
+    html:not(.dark) .border-slate-700/60,
+    html:not(.dark) .border-slate-700/80 {
+      border-color: #cbd5e1 !important;
+    }
+    html:not(.dark) .ctrl-btn {
+      background: #ffffff !important;
+      border-color: #cbd5e1 !important;
+      color: #1e293b !important;
+    }
+    html:not(.dark) .ctrl-btn:hover {
+      background: #f1f5f9 !important;
+    }
+    html:not(.dark) .preset-btn {
+      background: #f1f5f9 !important;
+      border-color: #e2e8f0 !important;
+      color: #334155 !important;
+    }
+    html:not(.dark) .preset-btn:hover {
+      background: #e2e8f0 !important;
+      color: #0f172a !important;
+    }
+    html:not(.dark) .bg-orb {
+      opacity: 0.12 !important;
+    }
+
+    /* ==========================================================================
+       Genius Cinematic Intro Video Overlay & Fade-Out (0912.mp4)
+       ========================================================================== */
+    #cinematicIntroOverlay {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: radial-gradient(circle at center, #050b1d 0%, #02050e 60%, #000206 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 1;
+      transform: scale(1);
+      filter: blur(0px);
+      transition: opacity 1.1s cubic-bezier(0.16, 1, 0.3, 1), transform 1.1s cubic-bezier(0.16, 1, 0.3, 1), filter 1.1s ease-out;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    #cinematicIntroOverlay.intro-fade-out {
+      opacity: 0 !important;
+      transform: scale(1.06) !important;
+      filter: blur(14px) !important;
+      pointer-events: none !important;
+    }
+
+    .cinematic-vignette {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at center, transparent 35%, rgba(2, 5, 14, 0.82) 80%, #010309 100%);
+      z-index: 2;
+    }
+
+    .cinematic-scanlines {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.28) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+      background-size: 100% 4px, 6px 100%;
+      opacity: 0.38;
+      z-index: 3;
+    }
+
+    .cinematic-glow-frame {
+      position: relative;
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: 0 0 50px rgba(56, 189, 248, 0.28), 0 0 120px rgba(168, 85, 247, 0.22), 0 35px 80px rgba(0, 0, 0, 0.95);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      max-width: 95vw;
+      max-height: 82vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #000;
+      z-index: 4;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .cinematic-glow-frame:hover {
+      border-color: rgba(56, 189, 248, 0.6);
+      box-shadow: 0 0 70px rgba(56, 189, 248, 0.4), 0 0 140px rgba(168, 85, 247, 0.3), 0 35px 80px rgba(0, 0, 0, 0.95);
+    }
+
+    /* Cyber HUD corner brackets */
+    .hud-corner {
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      pointer-events: none;
+      z-index: 10;
+      border-color: #38bdf8;
+      transition: all 0.3s ease;
+    }
+    .hud-corner-tl { top: 14px; left: 14px; border-top: 2px solid; border-left: 2px solid; }
+    .hud-corner-tr { top: 14px; right: 14px; border-top: 2px solid; border-right: 2px solid; }
+    .hud-corner-bl { bottom: 14px; left: 14px; border-bottom: 2px solid; border-left: 2px solid; }
+    .hud-corner-br { bottom: 14px; right: 14px; border-bottom: 2px solid; border-right: 2px solid; }
+    .cinematic-glow-frame:hover .hud-corner {
+      border-color: #f43f5e;
+      transform: scale(1.1);
+    }
+
+    .sound-pulse-ring {
+      animation: soundRing 1.8s infinite cubic-bezier(0.4, 0, 0.6, 1);
+    }
+    @keyframes soundRing {
+      0% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.6); }
+      70% { box-shadow: 0 0 0 10px rgba(168, 85, 247, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0); }
+    }
+  </style>
+</head>
+<body class="min-h-screen relative flex flex-col justify-between selection:bg-rose-500 selection:text-white">
+
+  <!-- Ambient Glowing Background Orbs -->
+  <div class="bg-orb orb-alpha"></div>
+  <div class="bg-orb orb-beta"></div>
+  <div class="bg-orb orb-center"></div>
+
+  <!-- Confetti Canvas for Victory Celebrations -->
+  <canvas id="confettiCanvas" class="fixed inset-0 pointer-events-none z-50 w-full h-full"></canvas>
+
+  <!-- =====================================================================
+       CINEMATIC VIDEO INTRO OVERLAY (Kling AI 0912.mp4 with Genius Fade-Out)
+       ===================================================================== -->
+  <div id="cinematicIntroOverlay" role="dialog" aria-modal="true" aria-label="AI Arena Cinematic Intro">
+    
+    <!-- Atmospheric Ambient Video Background & Vignette -->
+    <div class="cinematic-vignette"></div>
+    <div class="cinematic-scanlines"></div>
+
+    <!-- Top HUD Navigation -->
+    <div class="absolute top-4 left-4 right-4 z-20 flex items-center justify-between pointer-events-auto">
+      
+      <!-- Brand & Status Pill -->
+      <div class="flex items-center gap-3 bg-slate-950/85 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-cyan-500/30 shadow-lg shadow-cyan-950/50">
+        <div class="relative flex h-2 w-2">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
+        </div>
+        <span class="text-[11px] font-mono font-bold tracking-widest text-cyan-300 uppercase">AI ARENA // CINEMATIC PROLOGUE</span>
+        <span class="hidden sm:inline text-[10px] px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 font-mono">KLING AI 4K</span>
+      </div>
+
+      <!-- Controls: Audio Toggle + Skip Intro -->
+      <div class="flex items-center gap-2">
+        <!-- Audio Unmute Toggle Button -->
+        <button id="introAudioBtn" onclick="toggleIntroAudio(event)" class="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-950/90 hover:bg-purple-900 text-purple-200 border border-purple-500/50 text-xs font-semibold backdrop-blur-md transition shadow-lg sound-pulse-ring cursor-pointer">
+          <span id="introAudioIcon">🔇</span>
+          <span id="introAudioText">Enable Sound</span>
+        </button>
+
+        <!-- Skip Intro Button -->
+        <button id="skipIntroBtn" onclick="finishIntroWithFade(event)" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-slate-900/90 hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-700 hover:border-cyan-500/50 text-xs font-semibold backdrop-blur-md transition shadow-lg group cursor-pointer">
+          <span>Skip Intro</span>
+          <span class="text-[10px] opacity-70">تخطي</span>
+          <svg class="w-3.5 h-3.5 text-cyan-400 group-hover:translate-x-0.5 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Center Cinematic Video Stage -->
+    <div class="cinematic-glow-frame relative flex items-center justify-center cursor-pointer group" onclick="toggleIntroPlayState()">
+      <!-- Corner Accents -->
+      <div class="hud-corner hud-corner-tl"></div>
+      <div class="hud-corner hud-corner-tr"></div>
+      <div class="hud-corner hud-corner-bl"></div>
+      <div class="hud-corner hud-corner-br"></div>
+
+      <!-- The Video Element (0912.mp4) -->
+      <video
+        id="introVideo"
+        src="0912.mp4"
+        playsinline
+        muted
+        preload="auto"
+        class="max-w-full max-h-[78vh] object-contain rounded-2xl block"
+      ></video>
+
+      <!-- Center Play / Unmute overlay badge on hover or initial state -->
+      <div id="introPlayBadge" class="absolute inset-0 flex flex-col items-center justify-center bg-black/35 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+        <div class="w-16 h-16 rounded-2xl bg-cyan-500/20 border border-cyan-400/50 flex items-center justify-center text-white shadow-xl shadow-cyan-500/20">
+          <svg id="introPlaySvg" class="w-8 h-8 text-cyan-300 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        <p class="text-xs text-slate-200 font-medium mt-3 tracking-wide drop-shadow">Click to Play / Pause &bull; Unmute Sound</p>
+      </div>
+    </div>
+
+    <!-- Bottom HUD Bar -->
+    <div class="absolute bottom-4 left-4 right-4 z-20 max-w-4xl mx-auto w-full px-4 pointer-events-auto flex flex-col items-center gap-2.5">
+      
+      <!-- High-Tech Progress Bar -->
+      <div class="w-full bg-slate-950/85 backdrop-blur-md p-2 rounded-xl border border-slate-800 shadow-xl flex items-center gap-3">
+        <span id="introTimeDisplay" class="text-[11px] font-mono text-cyan-400 font-bold min-w-[65px]">00:00 / 00:05</span>
+        <div class="flex-1 h-1.5 bg-slate-800 rounded-full overflow-hidden relative">
+          <div id="introProgressBar" class="h-full bg-gradient-to-r from-rose-500 via-purple-500 to-cyan-400 w-0 transition-all duration-100"></div>
+        </div>
+        <button onclick="finishIntroWithFade(event)" class="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-rose-600 via-purple-600 to-cyan-500 hover:opacity-90 text-white text-xs font-bold shadow-md shadow-purple-900/40 transition flex items-center gap-1.5 flex-shrink-0 cursor-pointer">
+          <span>Enter Arena ⚡</span>
+          <span class="text-[10px] font-normal opacity-80">دخول</span>
+        </button>
+      </div>
+
+      <!-- Quick Subtitle / Arabic & English Notice -->
+      <div class="text-[11px] text-slate-400 font-medium tracking-wide flex items-center gap-2 drop-shadow">
+        <span>🎬 Autonomous AI Debate Awakening</span>
+        <span class="opacity-40">&bull;</span>
+        <span dir="rtl" class="text-slate-300">مناظرة العمالقة &bull; الذكاء الاصطناعي الفائق</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Top Navigation Bar -->
+  <header class="app-header relative z-20 sticky top-0 px-4 lg:px-8 py-3 transition-all">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      
+      <!-- Brand Logo -->
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-600 via-purple-600 to-cyan-500 p-0.5 shadow-md shadow-purple-500/20 flex items-center justify-center">
+          <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
+            <svg class="w-5 h-5 text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+            </svg>
+          </div>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-display font-extrabold text-xl tracking-wider bg-gradient-to-r from-rose-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">
+              AI ARENA
+            </h1>
+            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20">v2.5 Global</span>
+          </div>
+          <p class="text-[10px] tracking-widest uppercase font-semibold text-slate-500 dark:text-slate-400">The Ultimate Idea Battle</p>
+        </div>
+      </div>
+
+      <!-- Quick Preset Selector -->
+      <div class="hidden xl:flex items-center gap-2">
+        <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">Presets:</span>
+        <button onclick="applyPreset(0)" class="text-xs px-2.5 py-1 rounded-lg preset-btn" id="presetBtn0">AI vs Human Labor</button>
+        <button onclick="applyPreset(1)" class="text-xs px-2.5 py-1 rounded-lg preset-btn" id="presetBtn1">Mars vs Ocean Abyss</button>
+        <button onclick="applyPreset(2)" class="text-xs px-2.5 py-1 rounded-lg preset-btn" id="presetBtn2">Open AI vs Regulation</button>
+      </div>
+
+      <!-- Public Production Controls -->
+      <div class="flex items-center space-x-2 sm:space-x-2.5">
+        
+        <!-- Global Language Selector Button -->
+        <button onclick="openLanguageModal()" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg ctrl-btn text-xs font-semibold shadow-sm">
+          <span id="currentLangFlag" class="text-base leading-none">🇺🇸</span>
+          <span id="currentLangName" class="hidden sm:inline">English</span>
+          <svg class="w-3.5 h-3.5 opacity-60 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </button>
+
+        <!-- Replay Cinematic Intro Trailer Button -->
+        <button id="replayIntroBtn" onclick="replayCinematicIntro()" title="Replay Cinematic Intro Video (0912.mp4)" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg ctrl-btn text-xs font-semibold shadow-sm text-cyan-300 border border-cyan-500/40 hover:border-cyan-400 transition bg-cyan-950/30">
+          <span>🎬</span>
+          <span class="hidden sm:inline">Intro</span>
+        </button>
+
+        <!-- ElevenLabs Key Manager & Status Button -->
+        <button id="elevenKeyHeaderBtn" onclick="openElevenLabsGateModal()" title="Manage ElevenLabs Studio Key" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg ctrl-btn text-xs font-semibold shadow-sm text-purple-300 border border-purple-500/40 hover:border-purple-400 transition bg-purple-950/30">
+          <span>⚡</span>
+          <span id="elevenKeyHeaderText" class="hidden sm:inline">ElevenLabs Key</span>
+          <span id="elevenKeyHeaderStatus" class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+        </button>
+
+        <!-- Audio Master Toggle (Voice ON / OFF) -->
+        <button id="ttsToggleBtn" onclick="toggleAudio()" title="Toggle Voice Commentary" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg ctrl-btn text-xs font-medium shadow-sm">
+          <span id="ttsIcon">
+            <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/>
+            </svg>
+          </span>
+          <span id="ttsLabel" class="hidden md:inline">Voice ON</span>
+        </button>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="relative z-10 max-w-7xl mx-auto px-4 lg:px-8 py-6 flex-1 flex flex-col space-y-8">
+
+    <!-- 0. Hero Intro Section & Mandatory ElevenLabs Platform Notice -->
+    <section id="arenaIntroHero" class="text-center max-w-4xl mx-auto pt-2 pb-1 space-y-4">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-950/70 border border-purple-500/30 text-purple-300 text-xs font-semibold shadow-lg shadow-purple-950/60">
+        <span class="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></span>
+        <span class="tracking-wide">AI ARENA &bull; AUTONOMOUS MULTI-LANGUAGE DEBATES</span>
+      </div>
+
+      <div>
+        <h1 class="font-display font-black text-2xl sm:text-3xl lg:text-4xl text-white tracking-wide leading-tight">
+          WHERE IDEAS CLASH WITH <br class="hidden sm:inline" />
+          <span class="bg-gradient-to-r from-rose-400 via-purple-300 to-cyan-400 bg-clip-text text-transparent">
+            ULTRA-REALISTIC HUMAN VOICES
+          </span>
+        </h1>
+        <p class="text-xs sm:text-sm text-slate-400 mt-2 font-medium" dir="rtl">
+          منصة المناظرات الفكرية بالذكاء الاصطناعي مع أصوات بشرية فائقة الواقعية بأي لغة تختارها
+        </p>
+      </div>
+
+      <!-- Mandatory ElevenLabs Intro Banner (Dynamic: Alert if missing, Active if present) -->
+      <div id="elevenKeyIntroBanner" class="transition-all duration-300"></div>
+    </section>
+
+    <!-- 1. Arena Control Panel (Setup) -->
+    <section id="setupSection" class="glass-card rounded-2xl p-5 lg:p-7 shadow-2xl transition-all duration-300 border border-slate-800">
+
+      <div class="flex flex-col md:flex-row items-center justify-between gap-4 pb-5 mb-5 border-b border-slate-800">
+        <div>
+          <h2 class="font-display text-lg lg:text-xl font-bold text-white tracking-wide flex items-center gap-2">
+            <span class="w-2 h-5 bg-gradient-to-b from-rose-500 to-cyan-500 rounded-full inline-block"></span>
+            ARENA COMBAT SPECIFICATIONS
+          </h2>
+          <p id="subheadingText" class="text-xs text-slate-400 mt-0.5">
+            Two balanced AI titans debate your ideas in any chosen language. ⚡ <span class="text-purple-300 font-semibold">ElevenLabs API Key required</span> for realistic speech synthesis.
+          </p>
+        </div>
+
+        <!-- Debate Mode Selector -->
+        <div class="flex items-center p-1 rounded-xl bg-slate-950/80 border border-slate-800">
+          <button id="modeDeathmatchBtn" onclick="selectMode('deathmatch')" class="px-4 py-2 rounded-lg text-xs font-semibold transition-all flex items-center gap-2 bg-gradient-to-r from-rose-600 to-rose-700 text-white shadow-lg shadow-rose-900/40">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+            </svg>
+            Deathmatch Mode
+          </button>
+          <button id="modeSynthesisBtn" onclick="selectMode('synthesis')" class="px-4 py-2 rounded-lg text-xs font-semibold transition-all flex items-center gap-2 text-slate-400 hover:text-slate-200">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+            </svg>
+            Synthesis Mode
+          </button>
+        </div>
+      </div>
+
+      <!-- Balanced Competing Inputs Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 relative">
+
+        <!-- Idea A Input (AI Alpha - Red/Purple) -->
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <label for="ideaInputA" class="text-xs uppercase tracking-wider font-bold text-rose-400 flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-rose-500 shadow-sm shadow-rose-500"></span>
+              Perspective A &bull; AI Alpha (The Visionary)
+            </label>
+            <span class="text-[11px] text-slate-500">Equal Caliber &bull; 100% Balanced</span>
+          </div>
+          <div class="relative">
+            <textarea id="ideaInputA" rows="3" class="w-full glass-input rounded-xl p-3.5 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-rose-500/50 transition resize-none" placeholder="Enter Perspective A..."></textarea>
+          </div>
+        </div>
+
+        <!-- Center VS Indicator -->
+        <div class="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-slate-900 border border-slate-700/80 items-center justify-center text-xs font-display font-black text-slate-300 shadow-xl z-10 pointer-events-none">
+          VS
+        </div>
+
+        <!-- Idea B Input (AI Beta - Cyan/Blue) -->
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <label for="ideaInputB" class="text-xs uppercase tracking-wider font-bold text-cyan-400 flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-cyan-500 shadow-sm shadow-cyan-500"></span>
+              Perspective B &bull; AI Beta (The Strategist)
+            </label>
+            <span class="text-[11px] text-slate-500">Equal Caliber &bull; 100% Balanced</span>
+          </div>
+          <div class="relative">
+            <textarea id="ideaInputB" rows="3" class="w-full glass-input rounded-xl p-3.5 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 transition resize-none" placeholder="Enter Perspective B..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Trigger Bar -->
+      <div class="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-slate-800/80">
+        <div class="flex flex-wrap items-center gap-3 text-xs text-slate-400">
+          <span class="flex items-center gap-1.5">
+            <span id="statusBarFlag" class="text-sm">🇺🇸</span>
+            Language: <strong id="statusBarLang" class="text-slate-200">English (US)</strong>
+          </span>
+          <span>&bull;</span>
+          <span class="flex items-center gap-1">
+            Engine: <strong id="activeModelLabel" class="text-slate-200 font-mono">qwen/qwen3.8-27b</strong>
+          </span>
+          <span>&bull;</span>
+          <span>3 Symmetric Rounds</span>
+        </div>
+
+        <div class="flex items-center gap-3 w-full sm:w-auto">
+          <button id="resetBattleBtn" onclick="resetBattleState()" class="hidden px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold border border-slate-700 transition">
+            Reset Arena
+          </button>
+          <button id="startBattleBtn" onclick="startBattle()" class="w-full sm:w-auto px-8 py-3 rounded-xl bg-gradient-to-r from-rose-600 via-purple-600 to-cyan-500 hover:from-rose-500 hover:to-cyan-400 text-white font-display font-bold text-sm tracking-wider shadow-lg shadow-purple-600/30 hover:shadow-purple-500/50 transition transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2">
+            <svg class="w-5 h-5 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            START BATTLE
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Balanced Interactive Battle Stage Arena -->
+    <section id="arenaStage" class="space-y-6">
+
+      <!-- Debater Visual Matchup Card (Symmetrical & Equal Design) -->
+      <div class="grid grid-cols-1 md:grid-cols-11 gap-4 items-center">
+
+        <!-- AI Alpha Visual Pod (Left) -->
+        <div id="podAlpha" class="md:col-span-5 glass-card rounded-2xl p-5 border border-slate-800 transition-all duration-300 relative overflow-hidden">
+          <div class="flex items-center space-x-4">
+            <!-- Glowing Avatar -->
+            <div id="avatarAlpha" class="w-16 h-16 rounded-2xl bg-gradient-to-br from-rose-600 to-purple-800 p-0.5 border border-rose-500/40 shadow-lg transition-all duration-300 flex-shrink-0 flex items-center justify-center">
+              <div class="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center overflow-hidden relative">
+                <svg class="w-9 h-9 text-rose-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Debater Info & Sound Bars -->
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between">
+                <h3 class="font-display font-bold text-white text-base tracking-wide flex items-center gap-2 flex-wrap">
+                  AI ALPHA
+                  <span id="badgeAlpha" class="text-[10px] font-sans font-bold px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30">IDLE</span>
+                  <span id="alphaVoiceBadge" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-rose-950/60 border border-rose-500/40 text-rose-300 flex items-center gap-1">
+                    <span>🎙️</span> <span id="alphaVoiceLabel">Titan Alpha (Dominant Baritone)</span>
+                  </span>
+                </h3>
+                <!-- Audio Equalizer Bars -->
+                <div id="waveAlpha" class="sound-wave flex items-center text-rose-500 h-6">
+                  <span class="sound-bar"></span><span class="sound-bar"></span><span class="sound-bar"></span><span class="sound-bar"></span><span class="sound-bar"></span>
+                </div>
+              </div>
+              <p id="labelAlphaIdea" class="text-xs text-slate-400 truncate mt-0.5">Awaiting Perspective A...</p>
+              
+              <!-- Symmetrical Momentum Score Meter -->
+              <div class="mt-2.5">
+                <div class="flex justify-between text-[11px] text-slate-400 mb-1">
+                  <span>Argument Momentum</span>
+                  <span id="scoreValAlpha" class="font-mono font-bold text-rose-400">50%</span>
+                </div>
+                <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                  <div id="scoreBarAlpha" class="h-full bg-gradient-to-r from-rose-600 to-purple-500 rounded-full transition-all duration-500" style="width: 50%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Center Round & Status Hub -->
+        <div class="md:col-span-1 flex flex-col items-center justify-center py-2 text-center">
+          <div id="centerStageBadge" class="w-14 h-14 rounded-2xl bg-slate-900 border border-slate-700/80 shadow-2xl flex flex-col items-center justify-center">
+            <span id="roundIndicatorLabel" class="text-[9px] font-black text-slate-500 uppercase tracking-tighter">ROUND</span>
+            <span id="roundIndicatorNumber" class="text-lg font-display font-black text-slate-200">--</span>
+          </div>
+          <span id="battleStatusText" class="text-[10px] uppercase font-bold tracking-widest text-slate-500 mt-2">Standby</span>
+        </div>
+
+        <!-- AI Beta Visual Pod (Right) -->
+        <div id="podBeta" class="md:col-span-5 glass-card rounded-2xl p-5 border border-slate-800 transition-all duration-300 relative overflow-hidden">
+          <div class="flex items-center space-x-4">
+            <!-- Debater Info & Sound Bars -->
+            <div class="flex-1 min-w-0 order-2 md:order-1">
+              <div class="flex items-center justify-between">
+                <!-- Audio Equalizer Bars -->
+                <div id="waveBeta" class="sound-wave flex items-center text-cyan-400 h-6">
+                  <span class="sound-bar"></span><span class="sound-bar"></span><span class="sound-bar"></span><span class="sound-bar"></span><span class="sound-bar"></span>
+                </div>
+                <h3 class="font-display font-bold text-white text-base tracking-wide flex items-center gap-2 flex-wrap">
+                  <span id="betaVoiceBadge" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-950/60 border border-cyan-500/40 text-cyan-300 flex items-center gap-1">
+                    <span>🎙️</span> <span id="betaVoiceLabel">Titan Beta (Articulate Tone)</span>
+                  </span>
+                  <span id="badgeBeta" class="text-[10px] font-sans font-bold px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">IDLE</span>
+                  AI BETA
+                </h3>
+              </div>
+              <p id="labelBetaIdea" class="text-xs text-slate-400 truncate mt-0.5 text-right">Awaiting Perspective B...</p>
+
+              <!-- Symmetrical Momentum Score Meter -->
+              <div class="mt-2.5">
+                <div class="flex justify-between text-[11px] text-slate-400 mb-1">
+                  <span id="scoreValBeta" class="font-mono font-bold text-cyan-400">50%</span>
+                  <span>Argument Momentum</span>
+                </div>
+                <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden flex justify-end">
+                  <div id="scoreBarBeta" class="h-full bg-gradient-to-l from-cyan-500 to-blue-600 rounded-full transition-all duration-500" style="width: 50%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Glowing Avatar -->
+            <div id="avatarBeta" class="w-16 h-16 rounded-2xl bg-gradient-to-bl from-cyan-500 to-blue-800 p-0.5 border border-cyan-500/40 shadow-lg transition-all duration-300 flex-shrink-0 flex items-center justify-center order-1 md:order-2">
+              <div class="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center overflow-hidden relative">
+                <svg class="w-9 h-9 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Live Debate Transcript Feed -->
+      <div class="glass-card rounded-2xl p-5 border border-slate-800 shadow-xl flex flex-col h-[480px]">
+        <!-- Feed Header -->
+        <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-800">
+          <div class="flex items-center space-x-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+            <h4 class="text-xs uppercase tracking-widest font-bold text-slate-300">Live Debate Stream</h4>
+            <span id="turnCounterTag" class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-400 font-mono">0 / 6 Turns</span>
+          </div>
+
+          <div class="flex items-center space-x-2">
+            <button onclick="copyTranscript()" class="text-xs px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition flex items-center gap-1">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+              Copy
+            </button>
+            <button onclick="exportTranscript()" class="text-xs px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition flex items-center gap-1">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+              Export
+            </button>
+          </div>
+        </div>
+
+        <!-- Scrollable Messages Container -->
+        <div id="transcriptFeed" class="flex-1 overflow-y-auto space-y-4 pr-2">
+          <!-- Standby Empty State Placeholder -->
+          <div id="feedEmptyState" class="h-full flex flex-col items-center justify-center text-center p-6 text-slate-500">
+            <div class="w-12 h-12 rounded-2xl bg-slate-800/60 border border-slate-700/50 flex items-center justify-center mb-3 text-slate-400">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+              </svg>
+            </div>
+            <h5 class="text-sm font-semibold text-slate-300">The Arena is Quiet</h5>
+            <p class="text-xs text-slate-400 max-w-sm mt-1">Configure your perspectives above and hit "Start Battle" to commence Round 1.</p>
+          </div>
+        </div>
+
+        <!-- Speech / Stream Progress Bar Indicator -->
+        <div id="streamProgressContainer" class="pt-2 hidden">
+          <div class="flex justify-between items-center text-[10px] text-slate-400 mb-1">
+            <span id="streamSpeakerName" class="font-bold text-rose-400">AI Alpha Speaking...</span>
+            <span id="streamVoiceStatus">Realistic Voice Synthesis Active</span>
+          </div>
+          <div class="w-full h-1 bg-slate-800 rounded-full overflow-hidden">
+            <div id="streamProgressBar" class="h-full bg-gradient-to-r from-rose-500 to-cyan-400 w-full animate-pulse"></div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- 3. AI Referee & Verdict Hub (Revealed at Battle End) -->
+    <section id="verdictSection" class="hidden transition-all duration-700">
+      <div class="glass-card rounded-2xl p-6 lg:p-8 border-2 border-amber-500/40 shadow-2xl relative overflow-hidden">
+        
+        <!-- Gold Ambient Header Glow -->
+        <div class="absolute -top-24 left-1/2 -translate-x-1/2 w-96 h-48 bg-amber-500/20 blur-3xl rounded-full pointer-events-none"></div>
+
+        <!-- Referee Header Banner -->
+        <div class="text-center relative z-10 space-y-2 mb-8">
+          <div class="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-bold uppercase tracking-widest">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/></svg>
+            <span>Supreme AI Arbiter &bull; Official Verdict</span>
+          </div>
+          <h2 id="verdictTitle" class="font-display font-black text-2xl lg:text-3xl text-white tracking-wide">
+            EVALUATING DEBATE TRANSCRIPT...
+          </h2>
+          <p id="verdictSubtitle" class="text-xs text-slate-300 max-w-xl mx-auto">
+            Analyzing logical consistency, rhetorical eloquence, empirical validity, and strategic impact across all 3 rounds.
+          </p>
+        </div>
+
+        <!-- Loading State Spinner for Judge -->
+        <div id="verdictLoading" class="flex flex-col items-center justify-center py-12 space-y-4">
+          <div class="w-12 h-12 border-4 border-amber-500/30 border-t-amber-500 rounded-full animate-spin"></div>
+          <p class="text-xs font-mono uppercase tracking-widest text-amber-400 animate-pulse">Consulting Supreme AI Arbiter...</p>
+        </div>
+
+        <!-- Verdict Content Box (Populated via JS) -->
+        <div id="verdictContent" class="hidden space-y-8">
+          
+          <!-- Winner / Synthesis Main Spotlight Card -->
+          <div id="spotlightCard" class="p-6 rounded-2xl bg-gradient-to-b from-slate-900/90 to-slate-950 border border-slate-700/80 shadow-2xl relative">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+              
+              <div class="flex items-center space-x-5">
+                <div id="spotlightBadgeIcon" class="w-20 h-20 rounded-2xl flex items-center justify-center text-3xl shadow-xl flex-shrink-0">
+                  🏆
+                </div>
+                <div>
+                  <span id="spotlightBadgeTag" class="text-[11px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                    DEATHMATCH CHAMPION
+                  </span>
+                  <h3 id="spotlightWinnerName" class="font-display text-2xl font-black text-white mt-1">
+                    AI ALPHA DECLARED VICTOR
+                  </h3>
+                  <p id="spotlightSummaryText" class="text-sm text-slate-300 mt-1 max-w-2xl leading-relaxed">
+                    AI Alpha dominated the arena with superior rhetorical momentum and dismantled the opposing assumptions.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Overall Scores Comparison Box -->
+              <div class="flex items-center space-x-6 bg-slate-950/80 px-6 py-4 rounded-xl border border-slate-800">
+                <div class="text-center">
+                  <div class="text-[10px] uppercase font-bold text-rose-400">Alpha Score</div>
+                  <div id="verdictAlphaFinalScore" class="font-display text-2xl font-black text-white">--</div>
+                </div>
+                <div class="text-slate-600 font-display text-lg font-bold">VS</div>
+                <div class="text-center">
+                  <div class="text-[10px] uppercase font-bold text-cyan-400">Beta Score</div>
+                  <div id="verdictBetaFinalScore" class="font-display text-2xl font-black text-white">--</div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Dynamic Hybrid Synthesis Concept Box (Visible in Synthesis Mode) -->
+            <div id="hybridConceptContainer" class="hidden mt-6 pt-6 border-t border-slate-800 space-y-4">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse"></span>
+                <h4 class="font-display text-sm font-bold tracking-wider text-amber-300 uppercase">
+                  Synthesized Hybrid Concept: <span id="hybridConceptTitle" class="text-white font-sans font-semibold">The Augmented Synthesis Framework</span>
+                </h4>
+              </div>
+              <div id="hybridPillarsList" class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                <!-- Pillars injected dynamically -->
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Deep Metric Breakdown Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <!-- Decisive Factor & Fatal Flaw Card -->
+            <div class="glass-card rounded-xl p-5 border border-slate-800 space-y-4">
+              <h4 class="text-xs uppercase tracking-wider font-bold text-slate-300 flex items-center gap-2">
+                <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                The Decisive Turning Point
+              </h4>
+              <p id="decisiveMomentText" class="text-xs text-slate-300 leading-relaxed bg-slate-950/60 p-3 rounded-lg border border-slate-800">
+                Loading decisive moment...
+              </p>
+
+              <h4 class="text-xs uppercase tracking-wider font-bold text-slate-300 flex items-center gap-2 pt-2">
+                <svg class="w-4 h-4 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                Opposing Stance Fatal Flaw
+              </h4>
+              <p id="fatalFlawText" class="text-xs text-slate-300 leading-relaxed bg-slate-950/60 p-3 rounded-lg border border-slate-800">
+                Loading fatal flaw analysis...
+              </p>
+            </div>
+
+            <!-- Scorecard Progress Breakdown -->
+            <div class="glass-card rounded-xl p-5 border border-slate-800 space-y-3.5">
+              <h4 class="text-xs uppercase tracking-wider font-bold text-slate-300 flex items-center justify-between">
+                <span>Objective Metric Assessment</span>
+                <span class="text-[10px] text-slate-500 font-mono">Max 100 PTS</span>
+              </h4>
+
+              <!-- Logic Score -->
+              <div class="space-y-1">
+                <div class="flex justify-between text-xs text-slate-300 font-medium">
+                  <span>Logical Rigor (25%)</span>
+                  <span class="font-mono text-[11px]"><span id="metricLogicAlpha" class="text-rose-400">--</span> vs <span id="metricLogicBeta" class="text-cyan-400">--</span></span>
+                </div>
+                <div class="w-full h-1.5 bg-slate-800 rounded-full flex overflow-hidden">
+                  <div id="barLogicAlpha" class="bg-rose-500 h-full" style="width: 50%;"></div>
+                  <div id="barLogicBeta" class="bg-cyan-400 h-full" style="width: 50%;"></div>
+                </div>
+              </div>
+
+              <!-- Rhetoric Score -->
+              <div class="space-y-1">
+                <div class="flex justify-between text-xs text-slate-300 font-medium">
+                  <span>Rhetorical Eloquence (25%)</span>
+                  <span class="font-mono text-[11px]"><span id="metricRhetoricAlpha" class="text-rose-400">--</span> vs <span id="metricRhetoricBeta" class="text-cyan-400">--</span></span>
+                </div>
+                <div class="w-full h-1.5 bg-slate-800 rounded-full flex overflow-hidden">
+                  <div id="barRhetoricAlpha" class="bg-rose-500 h-full" style="width: 50%;"></div>
+                  <div id="barRhetoricBeta" class="bg-cyan-400 h-full" style="width: 50%;"></div>
+                </div>
+              </div>
+
+              <!-- Evidence Score -->
+              <div class="space-y-1">
+                <div class="flex justify-between text-xs text-slate-300 font-medium">
+                  <span>Empirical Evidence (25%)</span>
+                  <span class="font-mono text-[11px]"><span id="metricEvidenceAlpha" class="text-rose-400">--</span> vs <span id="metricEvidenceBeta" class="text-cyan-400">--</span></span>
+                </div>
+                <div class="w-full h-1.5 bg-slate-800 rounded-full flex overflow-hidden">
+                  <div id="barEvidenceAlpha" class="bg-rose-500 h-full" style="width: 50%;"></div>
+                  <div id="barEvidenceBeta" class="bg-cyan-400 h-full" style="width: 50%;"></div>
+                </div>
+              </div>
+
+              <!-- Impact Score -->
+              <div class="space-y-1">
+                <div class="flex justify-between text-xs text-slate-300 font-medium">
+                  <span>Strategic Impact (25%)</span>
+                  <span class="font-mono text-[11px]"><span id="metricImpactAlpha" class="text-rose-400">--</span> vs <span id="metricImpactBeta" class="text-cyan-400">--</span></span>
+                </div>
+                <div class="w-full h-1.5 bg-slate-800 rounded-full flex overflow-hidden">
+                  <div id="barImpactAlpha" class="bg-rose-500 h-full" style="width: 50%;"></div>
+                  <div id="barImpactBeta" class="bg-cyan-400 h-full" style="width: 50%;"></div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- Bottom Action Buttons -->
+          <div class="flex flex-wrap items-center justify-center gap-4 pt-4">
+            <button onclick="speakVerdictSummary()" class="px-5 py-2.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-bold tracking-wide transition flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg>
+              Replay Arbiter Audio
+            </button>
+            <button onclick="startRematch()" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-cyan-500 hover:from-rose-500 hover:to-cyan-400 text-white text-xs font-display font-bold tracking-wider shadow-lg transition">
+              NEW REMATCH
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="relative z-10 border-t border-slate-900 bg-slate-950/80 px-4 py-4 text-center text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+      <p>AI Arena &copy; 2026 &bull; Autonomous Multi-Language AI Arena &bull; Studio Speech by <strong class="text-purple-400 font-semibold">ElevenLabs Multilingual AI</strong></p>
+      <div class="flex items-center space-x-3 text-slate-400">
+        <span>Balanced AI Engine</span>
+        <span>&bull;</span>
+        <span>All World Languages</span>
+        <span>&bull;</span>
+        <span>Realistic Voices</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 4. Global Language Selection Modal (All Languages on Earth) -->
+  <div id="languageModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 hidden">
+    <div class="glass-card rounded-2xl max-w-xl w-full p-6 border border-slate-700/80 shadow-2xl relative flex flex-col max-h-[90vh]">
+      <button onclick="closeLanguageModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white p-1">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+
+      <div class="flex items-center space-x-3 mb-4">
+        <div class="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center border border-cyan-500/30 text-xl">
+          🌍
+        </div>
+        <div>
+          <h3 class="font-display font-bold text-white text-base">Select Debate Language</h3>
+          <p class="text-xs text-slate-400">AI Alpha, AI Beta, and the Referee will debate and speak in your chosen language.</p>
+        </div>
+      </div>
+
+      <!-- Language Search Filter -->
+      <div class="relative mb-3">
+        <input type="text" id="langSearchInput" oninput="filterLanguages()" placeholder="Search language (e.g., Arabic, Spanish, Japanese)..." class="w-full glass-input rounded-xl px-3.5 py-2 text-xs text-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500/50">
+        <svg class="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+      </div>
+
+      <!-- Languages Grid Container -->
+      <div id="languagesGrid" class="flex-1 overflow-y-auto grid grid-cols-2 sm:grid-cols-3 gap-2 pr-1 py-1">
+        <!-- Dynamically rendered via JS -->
+      </div>
+
+      <div class="pt-4 mt-2 border-t border-slate-800 text-center text-[11px] text-slate-400">
+        Language changes will adjust the AI debate prompt and calibrate native speech synthesis voices.
+      </div>
+    </div>
+  </div>
+
+  <!-- 1. Voice Studio Modal: Exclusive ElevenLabs Studio Cast -->
+  <div id="voiceStudioModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 hidden">
+    <div class="glass-card rounded-2xl max-w-xl w-full p-6 border border-purple-500/40 shadow-2xl relative max-h-[92vh] flex flex-col">
+      <button onclick="closeVoiceStudioModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white p-1 transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+
+      <!-- Modal Header -->
+      <div class="flex items-center space-x-3 mb-4 pb-3 border-b border-slate-800">
+        <div class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center border border-purple-500/40 text-xl shadow-lg shadow-purple-950/40">
+          ⚡
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h3 class="font-display font-bold text-white text-base tracking-wide">ElevenLabs Studio Voice Cast</h3>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 font-semibold font-mono">Multilingual v2</span>
+          </div>
+          <p class="text-xs text-slate-400">Curate the Hollywood-grade voices for your 3 Titans in Arabic, English, and 29 languages</p>
+        </div>
+      </div>
+
+      <!-- Modal Scrollable Body -->
+      <div class="space-y-4 overflow-y-auto pr-1 flex-1">
+
+        <!-- Active Key Status Bar -->
+        <div class="p-3 rounded-xl bg-slate-900/90 border border-purple-500/30 flex items-center justify-between">
+          <div class="flex items-center gap-2 text-xs">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 shadow-sm shadow-emerald-400 animate-pulse"></span>
+            <span class="text-slate-300 font-medium">Engine: <strong class="text-purple-300">ElevenLabs Studio AI</strong></span>
+          </div>
+          <button onclick="openElevenLabsGateModal()" type="button" class="text-[11px] font-semibold text-purple-400 hover:text-purple-300 underline flex items-center gap-1">
+            <span>Change Key</span> ↗
+          </button>
+        </div>
+
+        <!-- The 3 Signature Voice Cards -->
+        <div class="space-y-3.5">
+          <!-- Card 1: Titan Alpha -->
+          <div class="p-3.5 rounded-xl bg-slate-900/80 border border-rose-500/40 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-rose-500 shadow-sm shadow-rose-500"></span>
+                <span class="text-xs font-bold text-white uppercase tracking-wider">AI Alpha &bull; The Visionary Leader</span>
+              </div>
+              <button onclick="testVoice('alpha')" type="button" class="px-2.5 py-1 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/40 text-[11px] font-bold transition flex items-center gap-1">
+                <span>🔊</span> Test
+              </button>
+            </div>
+            <select id="voiceSelectAlpha" onchange="onLiveVoiceChange('alpha')" class="w-full glass-input rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:ring-2 focus:ring-rose-500/50 bg-slate-900 font-medium">
+              <option value="pNInz6obpgDQGcFmaJgB">Adam (Commanding, Deep Baritone Male &bull; Studio Lead)</option>
+              <option value="ErXwobaYiN019PkySvjV">Antoni (Persuasive, Confident Male &bull; Dynamic Lead)</option>
+              <option value="onwK4e9ZLuTAKqWW03F9">Daniel (Authoritative Broadcaster Male)</option>
+              <option value="TxGEqnHWrfWFTfGW9XjX">Josh (Resonant, Young Male)</option>
+            </select>
+          </div>
+
+          <!-- Card 2: Titan Beta -->
+          <div class="p-3.5 rounded-xl bg-slate-900/80 border border-cyan-500/40 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-sm shadow-cyan-400"></span>
+                <span class="text-xs font-bold text-white uppercase tracking-wider">AI Beta &bull; The Empirical Strategist</span>
+              </div>
+              <button onclick="testVoice('beta')" type="button" class="px-2.5 py-1 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 text-[11px] font-bold transition flex items-center gap-1">
+                <span>🔊</span> Test
+              </button>
+            </div>
+            <select id="voiceSelectBeta" onchange="onLiveVoiceChange('beta')" class="w-full glass-input rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 bg-slate-900 font-medium">
+              <option value="21m00Tcm4TlvDq8ikWAM">Rachel (Calm, Intellectual Female &bull; Studio Lead)</option>
+              <option value="EXAVITQu4vr4xnSDxMaL">Bella (Passionate, Expressive Female)</option>
+              <option value="MF3mGyEYCl7XYWbV9V6O">Elli (Crisp, Analytical Female)</option>
+              <option value="IKne3meq5aSn9XLyUdCD">Charlie (Dynamic, Nuanced Orator)</option>
+            </select>
+          </div>
+
+          <!-- Card 3: Supreme Arbiter -->
+          <div class="p-3.5 rounded-xl bg-slate-900/80 border border-amber-500/40 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-amber-400 shadow-sm shadow-amber-400"></span>
+                <span class="text-xs font-bold text-white uppercase tracking-wider">Supreme Arbiter &bull; The Impartial Judge</span>
+              </div>
+              <button onclick="testVoice('judge')" type="button" class="px-2.5 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-[11px] font-bold transition flex items-center gap-1">
+                <span>🔊</span> Test
+              </button>
+            </div>
+            <select id="voiceSelectJudge" onchange="onLiveVoiceChange('judge')" class="w-full glass-input rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500/50 bg-slate-900 font-medium">
+              <option value="JBFqnCBsd6RMkjVDRZzb">George (Supreme British Orator &bull; Grand Judicial)</option>
+              <option value="VR6AewLTigWG4xSOukaG">Arnold (Deep Baritone &bull; Imperial Verdict)</option>
+            </select>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer Actions -->
+      <div class="flex items-center justify-between pt-4 mt-3 border-t border-slate-800">
+        <button onclick="testAllThreeVoices()" type="button" class="text-xs font-semibold px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center gap-1.5">
+          <span>🎧</span> Test Triad
+        </button>
+        <div class="flex items-center gap-2">
+          <button onclick="closeVoiceStudioModal()" type="button" class="text-xs px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium transition">
+            Close
+          </button>
+          <button onclick="saveVoiceStudioSettings()" type="button" class="text-xs px-5 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold tracking-wide shadow-lg shadow-purple-900/50 transition">
+            Apply Voices
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 2. ElevenLabs API Key Onboarding & Gate Modal (Mandatory Intro Guide) -->
+  <div id="elevenLabsGateModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 hidden">
+    <div class="glass-card rounded-2xl max-w-xl w-full p-6 border border-purple-500/50 shadow-2xl relative max-h-[95vh] overflow-y-auto">
+      <button onclick="closeElevenLabsGateModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white p-1 transition" title="Close">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+
+      <!-- Modal Header -->
+      <div class="flex items-center space-x-3 mb-4">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-600 to-indigo-600 text-white flex items-center justify-center text-2xl shadow-lg shadow-purple-900/50 flex-shrink-0 animate-pulse">
+          ⚡
+        </div>
+        <div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <h3 class="font-display font-bold text-white text-base sm:text-lg">Welcome to AI Arena &bull; ElevenLabs API Key Required</h3>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30 font-semibold font-mono">مطلوب وإلزامي</span>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-semibold">10,000 Chars Free</span>
+          </div>
+          <p class="text-xs text-purple-300 font-medium mt-0.5">This platform strictly requires an ElevenLabs API key to operate and generate realistic human speech</p>
+        </div>
+      </div>
+
+      <!-- Why is this required & 30s Guide -->
+      <div class="space-y-3.5">
+        
+        <!-- Requirement Notice Box -->
+        <div class="p-3.5 rounded-xl bg-purple-950/50 border border-purple-500/40 space-y-2 text-xs">
+          <div class="font-bold text-white flex items-center gap-1.5 text-xs">
+            <span>📢</span> Why is an ElevenLabs API Key strictly required?
+          </div>
+          <p class="text-slate-300 text-[11px] leading-relaxed">
+            AI Arena relies exclusively on <strong class="text-white">ElevenLabs Multilingual v2</strong> to generate authentic, Hollywood-grade human debate voices with natural breathing, cadence, and emotion in Arabic, English, and 29 languages. Standard browser synthesizers sound robotic and cannot pronounce fluent Arabic.
+          </p>
+          <div class="pt-2 border-t border-purple-500/25 text-purple-200 text-[11px] leading-relaxed" dir="rtl">
+            📌 <strong>تنبيه إلزامي لتشغيل المنصة:</strong> الموقع لا يعمل إلا بوجود مفتاح ElevenLabs API مجاني لضمان الحصول على أصوات بشرية خارقة الواقعية ونطق عربي فصيح. التسجيل مجاني 100% (10,000 حرف شهرياً) وبدون أي بطاقة بنكية.
+          </div>
+        </div>
+
+        <!-- 30-Second Quick Start Steps -->
+        <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2 text-xs">
+          <div class="font-bold text-emerald-300 flex items-center gap-1.5 text-[11px] uppercase tracking-wider">
+            <span>🚀</span> 30-Second Free Quick Start (Zero Credit Card):
+          </div>
+          <ol class="list-decimal list-inside space-y-1.5 text-[11px] text-slate-300 leading-relaxed">
+            <li>Open <a href="https://elevenlabs.io" target="_blank" rel="noopener noreferrer" class="text-purple-300 underline font-semibold hover:text-white">elevenlabs.io ↗</a> and create a free account.</li>
+            <li>Click your <strong class="text-white">Profile Icon</strong> (bottom-left corner) &rarr; Copy your <strong class="text-purple-300">API Key</strong>.</li>
+            <li>Paste your key below and click <strong class="text-emerald-300">Unlock &amp; Activate Arena</strong>!</li>
+          </ol>
+        </div>
+
+        <!-- Key Input Field -->
+        <div>
+          <label for="elevenGateKeyInput" class="block text-xs font-semibold uppercase text-slate-300 mb-1.5 flex items-center justify-between">
+            <span>ElevenLabs API Key (<code class="text-purple-300">xi-api-key</code>)</span>
+            <span class="text-[10px] text-rose-400 font-normal">Required / إلزامي</span>
+          </label>
+          <div class="relative">
+            <input type="password" id="elevenGateKeyInput" class="w-full glass-input rounded-xl px-3.5 py-2.5 text-xs text-slate-200 focus:outline-none focus:ring-2 focus:ring-purple-500/50 pr-20 font-mono" placeholder="Paste your ElevenLabs key (xi-api-key)...">
+            <button onclick="toggleElevenGateKeyVisibility()" type="button" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-slate-400 hover:text-slate-200 font-medium px-2 py-1">
+              <span id="elevenGateKeyVisibilityText">Show</span>
+            </button>
+          </div>
+          <p class="text-[10px] text-slate-500 mt-1.5 flex items-center justify-between">
+            <span>🔒 Saved securely only in your private browser storage.</span>
+            <a href="https://elevenlabs.io" target="_blank" rel="noopener noreferrer" class="text-purple-400 hover:underline">Get Free Key at elevenlabs.io ↗</a>
+          </p>
+        </div>
+
+        <!-- Modal Actions -->
+        <div class="flex items-center justify-between pt-3 border-t border-slate-800 flex-wrap gap-2">
+          <a href="https://elevenlabs.io" target="_blank" rel="noopener noreferrer" class="text-xs text-purple-400 hover:underline flex items-center gap-1 font-semibold">
+            <span>Get Free Key (elevenlabs.io)</span>
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+          </a>
+          <div class="flex items-center gap-2">
+            <button id="elevenGateClearBtn" onclick="clearElevenLabsGateKey()" type="button" class="hidden px-3.5 py-2.5 rounded-xl text-xs font-semibold text-rose-400 hover:text-rose-300 hover:bg-rose-950/40 border border-rose-500/30 transition">
+              Disconnect Key
+            </button>
+            <button onclick="saveElevenLabsGateKey()" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-500 hover:from-purple-500 hover:to-cyan-400 text-white font-bold text-xs tracking-wider shadow-lg shadow-purple-900/50 transition transform hover:-translate-y-0.5 active:translate-y-0">
+              Unlock &amp; Activate Arena ⚡
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. ElevenLabs Quota Exhausted Modal (Genius & Professional Alert) -->
+  <div id="elevenLabsQuotaModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 hidden">
+    <div class="glass-card rounded-2xl max-w-lg w-full p-6 border border-amber-500/50 shadow-2xl relative">
+      <button onclick="closeElevenLabsQuotaModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white p-1 transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+
+      <div class="flex items-center space-x-3 mb-4">
+        <div class="w-11 h-11 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-xl border border-amber-500/40">
+          ⏳
+        </div>
+        <div>
+          <h3 class="font-display font-bold text-white text-base">ElevenLabs Monthly Quota Reached</h3>
+          <p class="text-xs text-amber-300/80">Monthly character limit reached on this key</p>
+        </div>
+      </div>
+
+      <div class="space-y-4 text-xs text-slate-300">
+        <p class="leading-relaxed">
+          Your free 10,000 monthly characters on ElevenLabs have been used up. You can easily insert another free API key, upgrade your plan on ElevenLabs, or continue listening with the Free HD Voice fallback!
+        </p>
+
+        <!-- Update Key Box -->
+        <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
+          <label class="block text-[11px] font-semibold text-slate-400 uppercase">Insert Fresh ElevenLabs Key</label>
+          <input type="password" id="elevenQuotaNewKeyInput" class="w-full glass-input rounded-xl px-3 py-2 text-xs text-slate-200 font-mono" placeholder="Paste new ElevenLabs key...">
+        </div>
+
+        <div class="flex items-center justify-between pt-3 border-t border-slate-800">
+          <button onclick="continueWithFallbackVoices()" type="button" class="text-xs text-slate-400 hover:text-white underline">
+            Continue with Free Voices
+          </button>
+          <button onclick="saveKeyFromQuotaModal()" type="button" class="px-5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs shadow-lg transition">
+            Save &amp; Resume ⚡
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col space-y-2 pointer-events-none"></div>
+
+  <!-- Application Logic (ES6+ Vanilla JavaScript) -->
+  <script>
+    /**
+     * AI Arena: The Ultimate Idea Battle
+     * Global Multi-Language + Realistic Voice + 100% Balanced Engine
+     */
+
+    // Supported Global Languages Catalog (Extensive Planet-Wide List)
+    const SUPPORTED_LANGUAGES = [
+      { code: 'en-US', name: 'English (US)', flag: '🇺🇸', native: 'English', rtl: false },
+      { code: 'ar-SA', name: 'Arabic', flag: '🇸🇦', native: 'العربية', rtl: true },
+      { code: 'es-ES', name: 'Spanish', flag: '🇪🇸', native: 'Español', rtl: false },
+      { code: 'fr-FR', name: 'French', flag: '🇫🇷', native: 'Français', rtl: false },
+      { code: 'de-DE', name: 'German', flag: '🇩🇪', native: 'Deutsch', rtl: false },
+      { code: 'zh-CN', name: 'Chinese (Simplified)', flag: '🇨🇳', native: '中文 (简体)', rtl: false },
+      { code: 'ja-JP', name: 'Japanese', flag: '🇯🇵', native: '日本語', rtl: false },
+      { code: 'ru-RU', name: 'Russian', flag: '🇷🇺', native: 'Русский', rtl: false },
+      { code: 'pt-BR', name: 'Portuguese', flag: '🇧🇷', native: 'Português', rtl: false },
+      { code: 'hi-IN', name: 'Hindi', flag: '🇮🇳', native: 'हिन्दी', rtl: false },
+      { code: 'it-IT', name: 'Italian', flag: '🇮🇹', native: 'Italiano', rtl: false },
+      { code: 'tr-TR', name: 'Turkish', flag: '🇹🇷', native: 'Türkçe', rtl: false },
+      { code: 'ko-KR', name: 'Korean', flag: '🇰🇷', native: '한국어', rtl: false },
+      { code: 'nl-NL', name: 'Dutch', flag: '🇳🇱', native: 'Nederlands', rtl: false },
+      { code: 'id-ID', name: 'Indonesian', flag: '🇮🇩', native: 'Bahasa Indonesia', rtl: false },
+      { code: 'pl-PL', name: 'Polish', flag: '🇵🇱', native: 'Polski', rtl: false },
+      { code: 'sv-SE', name: 'Swedish', flag: '🇸🇪', native: 'Svenska', rtl: false },
+      { code: 'vi-VN', name: 'Vietnamese', flag: '🇻🇳', native: 'Tiếng Việt', rtl: false },
+      { code: 'ur-PK', name: 'Urdu', flag: '🇵🇰', native: 'اردو', rtl: true },
+      { code: 'fa-IR', name: 'Persian', flag: '🇮🇷', native: 'فارسی', rtl: true },
+      { code: 'el-GR', name: 'Greek', flag: '🇬🇷', native: 'Ελληνικά', rtl: false },
+      { code: 'he-IL', name: 'Hebrew', flag: '🇮🇱', native: 'עברית', rtl: true },
+      { code: 'th-TH', name: 'Thai', flag: '🇹🇭', native: 'ไทย', rtl: false },
+      { code: 'ms-MY', name: 'Malay', flag: '🇲🇾', native: 'Bahasa Melayu', rtl: false },
+      { code: 'uk-UA', name: 'Ukrainian', flag: '🇺🇦', native: 'Українська', rtl: false },
+      { code: 'cs-CZ', name: 'Czech', flag: '🇨🇿', native: 'Čeština', rtl: false },
+      { code: 'ro-RO', name: 'Romanian', flag: '🇷🇴', native: 'Română', rtl: false },
+      { code: 'hu-HU', name: 'Hungarian', flag: '🇭🇺', native: 'Magyar', rtl: false },
+      { code: 'da-DK', name: 'Danish', flag: '🇩🇰', native: 'Dansk', rtl: false },
+      { code: 'fi-FI', name: 'Finnish', flag: '🇫🇮', native: 'Suomi', rtl: false },
+      { code: 'no-NO', name: 'Norwegian', flag: '🇳🇴', native: 'Norsk', rtl: false }
+    ];
+
+    // Multilingual Preset Debates
+    const MULTI_PRESETS = {
+      'en-US': [
+        {
+          ideaA: "Artificial Superintelligence will eliminate human labor, creating an equitable, post-scarcity society of creative leisure.",
+          ideaB: "Human craftsmanship, emotional resonance, and organic purpose cannot be simulated; AI must be strictly limited to an augmentative tool."
+        },
+        {
+          ideaA: "Humanity must focus all existential resources on colonizing Mars to guarantee long-term multispecies survival beyond Earth.",
+          ideaB: "Deep sea abyss colonization and marine geothermal exploration offer vastly superior survival redundancy, energy abundance, and immediate viability."
+        },
+        {
+          ideaA: "Frontier AI models must remain completely open-source and democratized to prevent centralized monopolistic corporate tyranny.",
+          ideaB: "Unconstrained open-source frontier models present catastrophic proliferation risks; strict state-level regulatory gates are non-negotiable."
+        }
+      ],
+      'ar-SA': [
+        {
+          ideaA: "الذكاء الاصطناعي الفائق سيقضي على العمل البشري التقليدي، ممهداً الطريق لعصر الوفرة والرفاهية والتحرر الإنساني.",
+          ideaB: "الحرفية والمشاعر والوعي البشري يستحيل محاكاتها؛ ويجب أن يظل الذكاء الاصطناعي مجرد أداة مساعدة لا بديلاً للإنسان."
+        },
+        {
+          ideaA: "استعمار كوكب المريخ هو الضمان الوجودي الوحيد لبقاء الحضارة الإنسانية واستمرارها في الكون.",
+          ideaB: "استكشاف وبناء مدن أعماق البحار على الأرض يقدم أماناً بيئياً ووفرة طاقة هائلة وجدوى أسرع بكثير من المريخ."
+        },
+        {
+          ideaA: "يجب إتاحة نماذج الذكاء الاصطناعي كمصدر مفتوح للجميع لمنع احتكار الشركات الكبرى واستبدادها الرقمي.",
+          ideaB: "النماذج مفتوحة المصدر فائقة القوة تشكل خطراً كارثياً محتملاً، والرقابة الصارمة هي صمام الأمان الوحيد."
+        }
+      ],
+      'es-ES': [
+        {
+          ideaA: "La superinteligencia artificial eliminará el trabajo humano, creando una sociedad equitativa de ocio creativo y abundancia.",
+          ideaB: "La artesanía, la emoción y el propósito humano son insustituibles; la IA debe ser únicamente una herramienta de apoyo."
+        },
+        {
+          ideaA: "La humanidad debe enfocar sus recursos en colonizar Marte para asegurar la supervivencia a largo plazo de nuestra especie.",
+          ideaB: "La colonización de las profundidades marinas en la Tierra ofrece mayor viabilidad, abundancia energética y seguridad inmediata."
+        },
+        {
+          ideaA: "Los modelos de IA de frontera deben ser totalmente de código abierto para evitar monopolios corporativos tiránicos.",
+          ideaB: "Los modelos abiertos sin restricciones presentan riesgos catastróficos; la regulación estatal estricta es obligatoria."
+        }
+      ]
+    };
+
+    // Default Configuration with user's provided key pre-filled
+    const CONFIG = {
+      DEFAULT_GROQ_KEY: "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",
+      GROQ_ENDPOINT: "https://api.groq.com/openai/v1/chat/completions",
+      DEFAULT_MODEL: "qwen/qwen3.8-27b",
+      DEFAULT_FISH_KEY: "",
+      STORAGE_KEY: "ai_arena_groq_key",
+      STORAGE_MODEL_KEY: "ai_arena_groq_model",
+      STORAGE_LANG_KEY: "ai_arena_user_language",
+      STORAGE_VOICE_ENGINE_KEY: "ai_arena_voice_engine",
+      STORAGE_FISH_KEY: "ai_arena_fish_key",
+      STORAGE_GOOGLE_KEY: "ai_arena_google_key",
+      STORAGE_ELEVEN_KEY: "ai_arena_eleven_key",
+      STORAGE_OPENAI_KEY: "ai_arena_openai_key",
+      STORAGE_VOICES_KEY: "ai_arena_assigned_voices",
+      STORAGE_VOICE_RATE_KEY: "ai_arena_voice_rate",
+      STORAGE_ALPHA_PITCH: "ai_arena_alpha_pitch",
+      STORAGE_BETA_PITCH: "ai_arena_beta_pitch",
+      STORAGE_JUDGE_PITCH: "ai_arena_judge_pitch"
+    };
+
+    // Fish Audio Generative Voice Catalog (Real Human Breaths & Emotion)
+    const FISH_VOICES = [
+      { id: '7f92f8afb8ec43bf81429cc1c9199cb1', name: 'Alpha: Marcus (Deep Commanding Baritone Male)', persona: 'alpha' },
+      { id: '54a587cdc47741e69517ab52d8b8e058', name: 'Alpha: Alexander (Persuasive Confident Male)', persona: 'alpha' },
+      { id: '2c29c8e1d6704ee0b3b44b6ccbb65910', name: 'Beta: Elena (Crisp Articulate Intellectual Female)', persona: 'beta' },
+      { id: '03d42c330fec44c98a3a0e101ab60548', name: 'Beta: Sophia (Dynamic Expressive Female)', persona: 'beta' },
+      { id: '675ccb9aa77f4e9596395dc481b7e42d', name: 'Judge: Sir Reginald (Supreme British Court Judge)', persona: 'judge' },
+      { id: '4c0e64c247484dfc94a9a08e1a61c5a9', name: 'Judge: Sterling (Solemn Formal Adjudicator)', persona: 'judge' }
+    ];
+
+    // Google Cloud Text-to-Speech Voice Catalog (1,000,000 Characters Free / Month)
+    const GOOGLE_VOICES = [
+      // English Neural2 & Journey Voices (Human Studio Quality)
+      { id: 'en-US-Journey-D', name: 'Journey D (Ultra-Realistic Conversational Male)', persona: 'alpha', lang: 'en' },
+      { id: 'en-US-Neural2-D', name: 'Neural2 D (Commanding, Deep Baritone Male)', persona: 'alpha', lang: 'en' },
+      { id: 'en-US-Neural2-A', name: 'Neural2 A (Confident, Assertive Male)', persona: 'alpha', lang: 'en' },
+      { id: 'en-US-Journey-F', name: 'Journey F (Ultra-Realistic Conversational Female)', persona: 'beta', lang: 'en' },
+      { id: 'en-US-Neural2-F', name: 'Neural2 F (Articulate, Expressive Female)', persona: 'beta', lang: 'en' },
+      { id: 'en-US-Neural2-C', name: 'Neural2 C (Crisp, Analytical Female)', persona: 'beta', lang: 'en' },
+      { id: 'en-US-Neural2-J', name: 'Neural2 J (Authoritative, Impartial Arbiter - Judge)', persona: 'judge', lang: 'en' },
+      { id: 'en-US-WaveNet-B', name: 'WaveNet B (Solemn, Grand Male - Judge)', persona: 'judge', lang: 'en' },
+      // Arabic WaveNet Voices (Pure Classical & Natural Arabic)
+      { id: 'ar-XA-Wavenet-B', name: 'WaveNet B (Deep Classical Arabic Male)', persona: 'alpha', lang: 'ar' },
+      { id: 'ar-XA-Wavenet-A', name: 'WaveNet A (Articulate Classical Arabic Female)', persona: 'beta', lang: 'ar' },
+      { id: 'ar-XA-Wavenet-C', name: 'WaveNet C (Solemn Judicial Arabic Male - Judge)', persona: 'judge', lang: 'ar' },
+      { id: 'ar-XA-Wavenet-D', name: 'WaveNet D (Eloquent Judicial Arabic Female - Judge)', persona: 'judge', lang: 'ar' }
+    ];
+
+    const CLOUD_VOICES = [
+      { id: 'cloud_alpha', name: '🌍 Cloud Neural Alpha (Commanding, Punchy Cadence)', persona: 'alpha' },
+      { id: 'cloud_beta', name: '🌍 Cloud Neural Beta (Expressive, Nuanced Tone)', persona: 'beta' },
+      { id: 'cloud_judge', name: '🌍 Cloud Neural Arbiter (Solemn, Authoritative)', persona: 'judge' }
+    ];
+
+    const ELEVENLABS_VOICES = [
+      { id: 'pNInz6obpgDQGcFmaJgB', name: 'Adam (Commanding, Deep Male)', persona: 'alpha' },
+      { id: 'ErXwobaYiN019PkySvjV', name: 'Antoni (Persuasive, Confident Male)', persona: 'alpha' },
+      { id: 'TxGEqnHWrfWFTfGW9XjX', name: 'Josh (Resonant, Young Male)', persona: 'alpha' },
+      { id: 'onwK4e9ZLuTAKqWW03F9', name: 'Daniel (Authoritative Broadcaster Male)', persona: 'alpha' },
+      { id: '21m00Tcm4TlvDq8ikWAM', name: 'Rachel (Calm, Intellectual Female)', persona: 'beta' },
+      { id: 'EXAVITQu4vr4xnSDxMaL', name: 'Bella (Passionate, Expressive Female)', persona: 'beta' },
+      { id: 'MF3mGyEYCl7XYWbV9V6O', name: 'Elli (Crisp, Analytical Female)', persona: 'beta' },
+      { id: 'IKne3meq5aSn9XLyUdCD', name: 'Charlie (Dynamic, Nuanced Orator)', persona: 'beta' },
+      { id: 'JBFqnCBsd6RMkjVDRZzb', name: 'George (Supreme British Orator - Judge)', persona: 'judge' },
+      { id: 'VR6AewLTigWG4xSOukaG', name: 'Arnold (Deep Baritone - Judge)', persona: 'judge' }
+    ];
+
+    const OPENAI_VOICES = [
+      { id: 'onyx', name: 'Onyx (Deep, Authoritative Male)', persona: 'alpha' },
+      { id: 'echo', name: 'Echo (Clear, Steady Male)', persona: 'alpha' },
+      { id: 'nova', name: 'Nova (Energetic, Articulate Female)', persona: 'beta' },
+      { id: 'shimmer', name: 'Shimmer (Bright, Expressive Female)', persona: 'beta' },
+      { id: 'fable', name: 'Fable (Warm, Impartial British - Judge)', persona: 'judge' },
+      { id: 'alloy', name: 'Alloy (Neutral, Balanced Tone)', persona: 'judge' }
+    ];
+
+    // Locked Default Studio Voices (Configured for ElevenLabs Multilingual v2)
+    const LOCKED_DEFAULT_VOICES = {
+      engine: 'elevenlabs',
+      elevenlabs: {
+        alpha: 'pNInz6obpgDQGcFmaJgB', // Adam (Commanding, Deep Male)
+        beta: 'IKne3meq5aSn9XLyUdCD',  // Charlie (Dynamic, Nuanced Orator)
+        judge: 'JBFqnCBsd6RMkjVDRZzb'  // George (Supreme British Orator - Judge)
+      },
+      browser: {
+        alpha: '',
+        beta: '',
+        judge: ''
+      },
+      rate: 1.05
+    };
+
+    function getInitialAssignedVoices() {
+      return {
+        ...LOCKED_DEFAULT_VOICES,
+        elevenlabs: {
+          alpha: 'pNInz6obpgDQGcFmaJgB',
+          beta: 'IKne3meq5aSn9XLyUdCD',
+          judge: 'JBFqnCBsd6RMkjVDRZzb'
+        }
+      };
+    }
+
+    function getInitialVoiceEngine() {
+      return 'elevenlabs';
+    }
+
+    // State Management
+    const state = {
+      apiKey: localStorage.getItem(CONFIG.STORAGE_KEY) || CONFIG.DEFAULT_GROQ_KEY,
+      model: localStorage.getItem(CONFIG.STORAGE_MODEL_KEY) || CONFIG.DEFAULT_MODEL,
+      language: getInitialLanguage(),
+      mode: 'deathmatch', // 'deathmatch' or 'synthesis'
+      isBattling: false,
+      audioEnabled: true,
+      currentRound: 0,
+      totalRounds: 3,
+      currentTurnIndex: 0,
+      totalTurns: 6,
+      transcript: [], // { speaker, round, roundTitle, text, timestamp }
+      verdictData: null,
+      momentum: { alpha: 50, beta: 50 }, // 100% Balanced Starting State
+      activeAudio: null,
+      speechCanceled: false,
+      speechSettings: {
+        engine: getInitialVoiceEngine(),
+        elevenlabsKey: localStorage.getItem(CONFIG.STORAGE_ELEVEN_KEY) || '',
+        rate: parseFloat(localStorage.getItem(CONFIG.STORAGE_VOICE_RATE_KEY)) || 1.05,
+        alphaPitch: 1.0,
+        betaPitch: 1.0,
+        judgePitch: 1.0,
+        assignedVoices: getInitialAssignedVoices()
+      }
+    };
+
+    function getInitialLanguage() {
+      const saved = localStorage.getItem(CONFIG.STORAGE_LANG_KEY);
+      if (saved) {
+        const found = SUPPORTED_LANGUAGES.find(l => l.code === saved);
+        if (found) return found;
+      }
+      // Auto-detect browser language
+      const browserLang = navigator.language || navigator.userLanguage || 'en-US';
+      const match = SUPPORTED_LANGUAGES.find(l => l.code === browserLang || l.code.split('-')[0] === browserLang.split('-')[0]);
+      return match || SUPPORTED_LANGUAGES[0];
+    }
+
+    // DOM Elements
+    const elements = {
+      ideaInputA: document.getElementById('ideaInputA'),
+      ideaInputB: document.getElementById('ideaInputB'),
+      modeDeathmatchBtn: document.getElementById('modeDeathmatchBtn'),
+      modeSynthesisBtn: document.getElementById('modeSynthesisBtn'),
+      startBattleBtn: document.getElementById('startBattleBtn'),
+      resetBattleBtn: document.getElementById('resetBattleBtn'),
+      ttsToggleBtn: document.getElementById('ttsToggleBtn'),
+      ttsIcon: document.getElementById('ttsIcon'),
+      ttsLabel: document.getElementById('ttsLabel'),
+      // ElevenLabs Gate & Header
+      elevenKeyHeaderBtn: document.getElementById('elevenKeyHeaderBtn'),
+      elevenKeyHeaderText: document.getElementById('elevenKeyHeaderText'),
+      elevenKeyHeaderStatus: document.getElementById('elevenKeyHeaderStatus'),
+      elevenKeyIntroBanner: document.getElementById('elevenKeyIntroBanner'),
+      elevenLabsGateModal: document.getElementById('elevenLabsGateModal'),
+      elevenGateKeyInput: document.getElementById('elevenGateKeyInput'),
+      elevenGateKeyVisibilityText: document.getElementById('elevenGateKeyVisibilityText'),
+      elevenLabsQuotaModal: document.getElementById('elevenLabsQuotaModal'),
+      elevenQuotaNewKeyInput: document.getElementById('elevenQuotaNewKeyInput'),
+      // Voice Studio elements
+      voiceStudioModal: document.getElementById('voiceStudioModal'),
+      voiceSelectAlpha: document.getElementById('voiceSelectAlpha'),
+      voiceSelectBeta: document.getElementById('voiceSelectBeta'),
+      voiceSelectJudge: document.getElementById('voiceSelectJudge'),
+      alphaVoiceLabel: document.getElementById('alphaVoiceLabel'),
+      betaVoiceLabel: document.getElementById('betaVoiceLabel'),
+      alphaVoiceBadge: document.getElementById('alphaVoiceBadge'),
+      betaVoiceBadge: document.getElementById('betaVoiceBadge'),
+      // Language Modal & Badges
+      languageModal: document.getElementById('languageModal'),
+      languagesGrid: document.getElementById('languagesGrid'),
+      langSearchInput: document.getElementById('langSearchInput'),
+      currentLangFlag: document.getElementById('currentLangFlag'),
+      currentLangName: document.getElementById('currentLangName'),
+      statusBarFlag: document.getElementById('statusBarFlag'),
+      statusBarLang: document.getElementById('statusBarLang'),
+      activeModelLabel: document.getElementById('activeModelLabel'),
+      // Arena pods & avatars
+      podAlpha: document.getElementById('podAlpha'),
+      podBeta: document.getElementById('podBeta'),
+      avatarAlpha: document.getElementById('avatarAlpha'),
+      avatarBeta: document.getElementById('avatarBeta'),
+      badgeAlpha: document.getElementById('badgeAlpha'),
+      badgeBeta: document.getElementById('badgeBeta'),
+      waveAlpha: document.getElementById('waveAlpha'),
+      waveBeta: document.getElementById('waveBeta'),
+      labelAlphaIdea: document.getElementById('labelAlphaIdea'),
+      labelBetaIdea: document.getElementById('labelBetaIdea'),
+      scoreValAlpha: document.getElementById('scoreValAlpha'),
+      scoreValBeta: document.getElementById('scoreValBeta'),
+      scoreBarAlpha: document.getElementById('scoreBarAlpha'),
+      scoreBarBeta: document.getElementById('scoreBarBeta'),
+      roundIndicatorNumber: document.getElementById('roundIndicatorNumber'),
+      battleStatusText: document.getElementById('battleStatusText'),
+      transcriptFeed: document.getElementById('transcriptFeed'),
+      feedEmptyState: document.getElementById('feedEmptyState'),
+      turnCounterTag: document.getElementById('turnCounterTag'),
+      streamProgressContainer: document.getElementById('streamProgressContainer'),
+      streamSpeakerName: document.getElementById('streamSpeakerName'),
+      streamVoiceStatus: document.getElementById('streamVoiceStatus'),
+      // Verdict Elements
+      verdictSection: document.getElementById('verdictSection'),
+      verdictLoading: document.getElementById('verdictLoading'),
+      verdictContent: document.getElementById('verdictContent'),
+      verdictTitle: document.getElementById('verdictTitle'),
+      spotlightCard: document.getElementById('spotlightCard'),
+      spotlightBadgeIcon: document.getElementById('spotlightBadgeIcon'),
+      spotlightBadgeTag: document.getElementById('spotlightBadgeTag'),
+      spotlightWinnerName: document.getElementById('spotlightWinnerName'),
+      spotlightSummaryText: document.getElementById('spotlightSummaryText'),
+      verdictAlphaFinalScore: document.getElementById('verdictAlphaFinalScore'),
+      verdictBetaFinalScore: document.getElementById('verdictBetaFinalScore'),
+      hybridConceptContainer: document.getElementById('hybridConceptContainer'),
+      hybridConceptTitle: document.getElementById('hybridConceptTitle'),
+      hybridPillarsList: document.getElementById('hybridPillarsList'),
+      decisiveMomentText: document.getElementById('decisiveMomentText'),
+      fatalFlawText: document.getElementById('fatalFlawText'),
+      metricLogicAlpha: document.getElementById('metricLogicAlpha'),
+      metricLogicBeta: document.getElementById('metricLogicBeta'),
+      barLogicAlpha: document.getElementById('barLogicAlpha'),
+      barLogicBeta: document.getElementById('barLogicBeta'),
+      metricRhetoricAlpha: document.getElementById('metricRhetoricAlpha'),
+      metricRhetoricBeta: document.getElementById('metricRhetoricBeta'),
+      barRhetoricAlpha: document.getElementById('barRhetoricAlpha'),
+      barRhetoricBeta: document.getElementById('barRhetoricBeta'),
+      metricEvidenceAlpha: document.getElementById('metricEvidenceAlpha'),
+      metricEvidenceBeta: document.getElementById('metricEvidenceBeta'),
+      barEvidenceAlpha: document.getElementById('barEvidenceAlpha'),
+      barEvidenceBeta: document.getElementById('barEvidenceBeta'),
+      metricImpactAlpha: document.getElementById('metricImpactAlpha'),
+      metricImpactBeta: document.getElementById('metricImpactBeta'),
+      barImpactAlpha: document.getElementById('barImpactAlpha'),
+      barImpactBeta: document.getElementById('barImpactBeta'),
+      confettiCanvas: document.getElementById('confettiCanvas'),
+      toastContainer: document.getElementById('toastContainer')
+    };
+
+    /**
+     * Dark-Blue Genius AI Theme (Locked for Public Release)
+     */
+    function ensureDarkBlueTheme() {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('ai_arena_theme', 'dark');
+    }
+
+    // Hidden Admin Key Shortcut (Ctrl + Shift + U) opens ElevenLabs Key Manager
+    window.addEventListener('keydown', (e) => {
+      if (e.ctrlKey && e.shiftKey && (e.key === 'U' || e.key === 'u')) {
+        openElevenLabsGateModal();
+      }
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      // 1. Enforce Dark-Blue AI Theme
+      ensureDarkBlueTheme();
+
+      // 2. Render Language Selector & UI
+      updateLanguageUi();
+      renderLanguagesGrid();
+      applyPreset(0);
+
+      // 3. Update ElevenLabs Header Badge & Live Persona Labels
+      updateElevenKeyHeaderBadge();
+      updateDebaterVoiceBadges();
+
+      // 4. Cinematic Video Intro (0912.mp4) Launch with Genius Fade-Out
+      initCinematicIntro();
+
+      // 5. Pre-fill Voice Studio selects
+      populateVoiceDropdowns();
+    });
+
+    /**
+     * Language Management (Global System)
+     */
+    function openLanguageModal() {
+      elements.languageModal.classList.remove('hidden');
+      elements.langSearchInput.value = '';
+      filterLanguages();
+      setTimeout(() => elements.langSearchInput.focus(), 50);
+    }
+
+    function closeLanguageModal() {
+      elements.languageModal.classList.add('hidden');
+    }
+
+    function selectLanguage(code) {
+      const found = SUPPORTED_LANGUAGES.find(l => l.code === code);
+      if (found) {
+        state.language = found;
+        localStorage.setItem(CONFIG.STORAGE_LANG_KEY, code);
+        updateLanguageUi();
+        applyPreset(0);
+        closeLanguageModal();
+        showToast(`Language set to: ${found.flag} ${found.name}`, 'success');
+      }
+    }
+
+    function updateLanguageUi() {
+      elements.currentLangFlag.textContent = state.language.flag;
+      elements.currentLangName.textContent = state.language.native;
+      elements.statusBarFlag.textContent = state.language.flag;
+      elements.statusBarLang.textContent = `${state.language.name} (${state.language.native})`;
+    }
+
+    function renderLanguagesGrid(filteredList = SUPPORTED_LANGUAGES) {
+      elements.languagesGrid.innerHTML = filteredList.map(lang => {
+        const isSelected = lang.code === state.language.code;
+        return `
+          <button onclick="selectLanguage('${lang.code}')" class="p-2.5 rounded-xl border text-left transition flex items-center space-x-2.5 ${
+            isSelected 
+              ? 'bg-cyan-500/20 border-cyan-400 text-white font-bold shadow-lg shadow-cyan-900/30' 
+              : 'bg-slate-900/60 border-slate-800/80 hover:bg-slate-800 text-slate-300 hover:border-slate-700'
+          }">
+            <span class="text-xl leading-none flex-shrink-0">${lang.flag}</span>
+            <div class="min-w-0 flex-1">
+              <div class="text-xs truncate font-medium text-white">${lang.name}</div>
+              <div class="text-[10px] text-slate-400 truncate">${lang.native}</div>
+            </div>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function filterLanguages() {
+      const q = elements.langSearchInput.value.toLowerCase().trim();
+      if (!q) {
+        renderLanguagesGrid(SUPPORTED_LANGUAGES);
+        return;
+      }
+      const filtered = SUPPORTED_LANGUAGES.filter(l => 
+        l.name.toLowerCase().includes(q) || 
+        l.native.toLowerCase().includes(q) || 
+        l.code.toLowerCase().includes(q)
+      );
+      renderLanguagesGrid(filtered);
+    }
+
+    /**
+     * Apply Preset Debates (Localized if available)
+     */
+    function applyPreset(index) {
+      if (state.isBattling) return;
+      const langPresets = MULTI_PRESETS[state.language.code] || MULTI_PRESETS['en-US'];
+      const preset = langPresets[index] || MULTI_PRESETS['en-US'][0];
+      if (preset) {
+        elements.ideaInputA.value = preset.ideaA;
+        elements.ideaInputB.value = preset.ideaB;
+      }
+    }
+
+    /**
+     * Mode Selection: Deathmatch vs. Synthesis
+     */
+    function selectMode(newMode) {
+      if (state.isBattling) return;
+      state.mode = newMode;
+      if (newMode === 'deathmatch') {
+        elements.modeDeathmatchBtn.className = "px-4 py-2 rounded-lg text-xs font-semibold transition-all flex items-center gap-2 bg-gradient-to-r from-rose-600 to-rose-700 text-white shadow-lg shadow-rose-900/40";
+        elements.modeSynthesisBtn.className = "px-4 py-2 rounded-lg text-xs font-semibold transition-all flex items-center gap-2 text-slate-400 hover:text-slate-200";
+      } else {
+        elements.modeSynthesisBtn.className = "px-4 py-2 rounded-lg text-xs font-semibold transition-all flex items-center gap-2 bg-gradient-to-r from-amber-500 to-yellow-600 text-slate-950 font-bold shadow-lg shadow-amber-900/40";
+        elements.modeDeathmatchBtn.className = "px-4 py-2 rounded-lg text-xs font-semibold transition-all flex items-center gap-2 text-slate-400 hover:text-slate-200";
+      }
+      showToast(`Mode: ${newMode.toUpperCase()}`, 'info');
+    }
+
+    /**
+     * Audio Master Toggle & Web Speech API Voice Selection
+     */
+    /**
+     * Toast Notification Dispatcher
+     */
+    function showToast(message, type = 'info') {
+      if (!elements.toastContainer) return;
+      const toast = document.createElement('div');
+      
+      const typeStyles = {
+        info: 'bg-slate-900/90 border-cyan-500/50 text-cyan-200 shadow-cyan-950/50',
+        success: 'bg-slate-900/90 border-emerald-500/50 text-emerald-200 shadow-emerald-950/50',
+        warning: 'bg-slate-900/90 border-amber-500/50 text-amber-200 shadow-amber-950/50',
+        error: 'bg-slate-900/90 border-rose-500/50 text-rose-200 shadow-rose-950/50'
+      };
+
+      const icons = {
+        info: 'ℹ️',
+        success: '✅',
+        warning: '⚠️',
+        error: '❌'
+      };
+
+      toast.className = 'pointer-events-auto flex items-center gap-2.5 px-4 py-2.5 rounded-xl border backdrop-blur-md shadow-lg text-xs font-medium transition-all duration-300 transform translate-x-8 opacity-0 ' + (typeStyles[type] || typeStyles.info);
+      toast.innerHTML = '<span>' + (icons[type] || '💬') + '</span><span>' + message + '</span>';
+
+      elements.toastContainer.appendChild(toast);
+
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-x-8', 'opacity-0');
+      });
+
+      setTimeout(() => {
+        toast.classList.add('translate-x-8', 'opacity-0');
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    /**
+     * Audio Master Toggle & Web Speech API Voice Selection
+     */
+    function toggleAudio() {
+      state.audioEnabled = !state.audioEnabled;
+      if (!state.audioEnabled) {
+        stopCurrentAudio();
+      }
+      updateAudioUi();
+      showToast(state.audioEnabled ? 'Voice Synthesis Enabled' : 'Voice Narration Muted', 'info');
+    }
+
+    function updateAudioUi() {
+      if (state.audioEnabled) {
+        elements.ttsIcon.innerHTML = '<svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg>';
+        elements.ttsLabel.textContent = 'Voice ON';
+        elements.ttsToggleBtn.classList.remove('border-rose-500/50', 'text-rose-400');
+      } else {
+        elements.ttsIcon.innerHTML = '<svg class="w-4 h-4 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"/></svg>';
+        elements.ttsLabel.textContent = 'Voice OFF';
+        elements.ttsToggleBtn.classList.add('border-rose-500/50', 'text-rose-400');
+      }
+    }
+
+    /**
+     * Stop all currently playing audio cleanly
+     */
+    function stopCurrentAudio() {
+      state.speechCanceled = true;
+      if (state.activeAudio) {
+        try {
+          state.activeAudio.pause();
+          state.activeAudio.currentTime = 0;
+        } catch (e) {}
+        state.activeAudio = null;
+      }
+      if ('speechSynthesis' in window) {
+        try { window.speechSynthesis.cancel(); } catch (e) {}
+      }
+      updateSpeakerUiState('alpha', false);
+      updateSpeakerUiState('beta', false);
+      updateSpeakerUiState('judge', false);
+    }
+
+    /**
+     * Voice Studio Modal Controls & Event Handlers
+     */
+    function openVoiceStudioModal() {
+      if (!elements.voiceStudioModal) return;
+      elements.voiceStudioModal.classList.remove('hidden');
+      populateVoiceDropdowns();
+    }
+
+    function closeVoiceStudioModal() {
+      if (elements.voiceStudioModal) {
+        elements.voiceStudioModal.classList.add('hidden');
+      }
+      stopCurrentAudio();
+      updateDebaterVoiceBadges();
+    }
+
+    function populateVoiceDropdowns() {
+      if (!state.speechSettings.assignedVoices) state.speechSettings.assignedVoices = getInitialAssignedVoices();
+      if (!state.speechSettings.assignedVoices.elevenlabs) {
+        state.speechSettings.assignedVoices.elevenlabs = { ...LOCKED_DEFAULT_VOICES.elevenlabs };
+      }
+      const assigned = state.speechSettings.assignedVoices.elevenlabs;
+
+      const alphaVoices = ELEVENLABS_VOICES.filter(v => v.persona === 'alpha');
+      const betaVoices = ELEVENLABS_VOICES.filter(v => v.persona === 'beta');
+      const judgeVoices = ELEVENLABS_VOICES.filter(v => v.persona === 'judge');
+
+      if (elements.voiceSelectAlpha) {
+        elements.voiceSelectAlpha.innerHTML = alphaVoices.map(v => 
+          `<option value="${v.id}" ${assigned.alpha === v.id ? 'selected' : ''}>${v.name}</option>`
+        ).join('');
+      }
+      if (elements.voiceSelectBeta) {
+        elements.voiceSelectBeta.innerHTML = betaVoices.map(v => 
+          `<option value="${v.id}" ${assigned.beta === v.id ? 'selected' : ''}>${v.name}</option>`
+        ).join('');
+      }
+      if (elements.voiceSelectJudge) {
+        elements.voiceSelectJudge.innerHTML = judgeVoices.map(v => 
+          `<option value="${v.id}" ${assigned.judge === v.id ? 'selected' : ''}>${v.name}</option>`
+        ).join('');
+      }
+    }
+
+    async function onLiveVoiceChange(speaker) {
+      if (!state.speechSettings.assignedVoices) state.speechSettings.assignedVoices = getInitialAssignedVoices();
+      if (!state.speechSettings.assignedVoices.elevenlabs) {
+        state.speechSettings.assignedVoices.elevenlabs = { ...LOCKED_DEFAULT_VOICES.elevenlabs };
+      }
+
+      let selectedVal = '';
+      if (speaker === 'alpha' && elements.voiceSelectAlpha) selectedVal = elements.voiceSelectAlpha.value;
+      if (speaker === 'beta' && elements.voiceSelectBeta) selectedVal = elements.voiceSelectBeta.value;
+      if (speaker === 'judge' && elements.voiceSelectJudge) selectedVal = elements.voiceSelectJudge.value;
+
+      if (selectedVal) {
+        state.speechSettings.assignedVoices.elevenlabs[speaker] = selectedVal;
+        localStorage.setItem(CONFIG.STORAGE_VOICES_KEY, JSON.stringify(state.speechSettings.assignedVoices));
+        updateDebaterVoiceBadges();
+        showToast(`${speaker.toUpperCase()} voice updated live!`, 'success');
+
+        // Preview live voice if key available
+        const elevenKey = (state.speechSettings.elevenlabsKey || '').trim();
+        if (elevenKey.length >= 10) {
+          const liveSamples = {
+            en: {
+              alpha: "AI Alpha voice updated.",
+              beta: "AI Beta voice updated.",
+              judge: "Arbiter voice updated."
+            },
+            ar: {
+              alpha: "تم اعتماد صوت ألفا بنجاح.",
+              beta: "تم اعتماد صوت بيتا بنجاح.",
+              judge: "تم اعتماد صوت الحكم بنجاح."
+            }
+          };
+          const langKey = state.language.code.startsWith('ar') ? 'ar' : 'en';
+          const phrase = liveSamples[langKey][speaker] || liveSamples.en[speaker];
+          await speakText(phrase, speaker);
+        }
+      }
+    }
+
+    function saveVoiceStudioSettings() {
+      if (!state.speechSettings.assignedVoices) state.speechSettings.assignedVoices = getInitialAssignedVoices();
+      if (!state.speechSettings.assignedVoices.elevenlabs) {
+        state.speechSettings.assignedVoices.elevenlabs = { ...LOCKED_DEFAULT_VOICES.elevenlabs };
+      }
+
+      if (elements.voiceSelectAlpha) state.speechSettings.assignedVoices.elevenlabs.alpha = elements.voiceSelectAlpha.value;
+      if (elements.voiceSelectBeta) state.speechSettings.assignedVoices.elevenlabs.beta = elements.voiceSelectBeta.value;
+      if (elements.voiceSelectJudge) state.speechSettings.assignedVoices.elevenlabs.judge = elements.voiceSelectJudge.value;
+
+      localStorage.setItem(CONFIG.STORAGE_VOICES_KEY, JSON.stringify(state.speechSettings.assignedVoices));
+      updateDebaterVoiceBadges();
+      closeVoiceStudioModal();
+      showToast('All Voice Studio assignments saved!', 'success');
+    }
+
+    function updateDebaterVoiceBadges() {
+      if (!elements.alphaVoiceLabel || !elements.betaVoiceLabel) return;
+      const assigned = state.speechSettings.assignedVoices?.elevenlabs || LOCKED_DEFAULT_VOICES.elevenlabs;
+      const a = ELEVENLABS_VOICES.find(v => v.id === assigned.alpha);
+      const b = ELEVENLABS_VOICES.find(v => v.id === assigned.beta);
+      elements.alphaVoiceLabel.textContent = a ? a.name.split(' ')[0] + ' (ElevenLabs)' : 'Adam (ElevenLabs)';
+      elements.betaVoiceLabel.textContent = b ? b.name.split(' ')[0] + ' (ElevenLabs)' : 'Charlie (ElevenLabs)';
+    }
+
+    function selectVoiceEngine(engine) {}
+    function updateVoiceEngineBadge() {}
+
+    /**
+     * Cinematic Prologue Video Intro (Kling AI 0912.mp4)
+     * Fullscreen presentation with dynamic HUD, time progress, audio unmuting & genius fade-out
+     */
+    let introFinished = false;
+
+    function initCinematicIntro() {
+      const overlay = document.getElementById('cinematicIntroOverlay');
+      const video = document.getElementById('introVideo');
+      const bar = document.getElementById('introProgressBar');
+      const timeDisplay = document.getElementById('introTimeDisplay');
+
+      if (!overlay || !video) {
+        onCinematicIntroFinished();
+        return;
+      }
+
+      // Ensure fresh state
+      introFinished = false;
+      video.muted = true;
+      video.playsInline = true;
+      video.currentTime = 0;
+
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          updateIntroAudioUi();
+        }).catch(err => {
+          console.warn('Intro video autoplay interaction required:', err);
+          const badge = document.getElementById('introPlayBadge');
+          if (badge) badge.classList.remove('opacity-0');
+        });
+      }
+
+      // Time & progress bar sync
+      video.addEventListener('timeupdate', () => {
+        if (!video.duration) return;
+        const pct = (video.currentTime / video.duration) * 100;
+        if (bar) bar.style.width = `${pct}%`;
+        if (timeDisplay) {
+          const cur = Math.floor(video.currentTime);
+          const dur = Math.floor(video.duration) || 5;
+          timeDisplay.textContent = `00:0${cur} / 00:0${dur}`;
+        }
+      });
+
+      // Video end trigger -> triggers genius fade out
+      video.addEventListener('ended', () => {
+        finishIntroWithFade();
+      });
+
+      // Keyboard navigation (Escape = skip intro, Space = pause/play)
+      window.addEventListener('keydown', handleIntroKeydown);
+    }
+
+    function handleIntroKeydown(e) {
+      const overlay = document.getElementById('cinematicIntroOverlay');
+      if (!overlay || overlay.style.display === 'none' || introFinished) return;
+
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        finishIntroWithFade();
+      } else if (e.code === 'Space' && e.target === document.body) {
+        e.preventDefault();
+        toggleIntroPlayState();
+      }
+    }
+
+    function toggleIntroAudio(e) {
+      if (e && e.stopPropagation) e.stopPropagation();
+      const video = document.getElementById('introVideo');
+      if (!video) return;
+
+      video.muted = !video.muted;
+      if (!video.muted) {
+        video.volume = 1.0;
+        if (video.paused) video.play().catch(console.error);
+      }
+      updateIntroAudioUi();
+    }
+
+    function updateIntroAudioUi() {
+      const video = document.getElementById('introVideo');
+      const icon = document.getElementById('introAudioIcon');
+      const text = document.getElementById('introAudioText');
+      const btn = document.getElementById('introAudioBtn');
+      if (!video || !icon || !text || !btn) return;
+
+      if (video.muted) {
+        icon.textContent = '🔇';
+        text.textContent = 'Enable Sound';
+        btn.className = 'flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-950/90 hover:bg-purple-900 text-purple-200 border border-purple-500/50 text-xs font-semibold backdrop-blur-md transition shadow-lg sound-pulse-ring cursor-pointer';
+      } else {
+        icon.textContent = '🔊';
+        text.textContent = 'Sound ON';
+        btn.className = 'flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-950/90 hover:bg-emerald-900 text-emerald-200 border border-emerald-500/50 text-xs font-semibold backdrop-blur-md transition shadow-lg cursor-pointer';
+      }
+    }
+
+    function toggleIntroPlayState() {
+      const video = document.getElementById('introVideo');
+      const badge = document.getElementById('introPlayBadge');
+      if (!video) return;
+
+      // If clicked while muted, unmute on first click
+      if (video.muted) {
+        video.muted = false;
+        video.volume = 1.0;
+        updateIntroAudioUi();
+      }
+
+      if (video.paused) {
+        video.play().then(() => {
+          if (badge) badge.classList.add('opacity-0');
+        }).catch(console.error);
+      } else {
+        video.pause();
+        if (badge) badge.classList.remove('opacity-0');
+      }
+    }
+
+    function finishIntroWithFade(e) {
+      if (e && e.stopPropagation) e.stopPropagation();
+      if (introFinished) return;
+      introFinished = true;
+
+      const overlay = document.getElementById('cinematicIntroOverlay');
+      const video = document.getElementById('introVideo');
+      if (!overlay) return;
+
+      // Audio smooth decrescendo
+      if (video && !video.paused) {
+        let vol = video.volume;
+        const fadeInt = setInterval(() => {
+          vol = Math.max(0, vol - 0.25);
+          video.volume = Math.max(0, vol);
+          if (vol <= 0) {
+            clearInterval(fadeInt);
+            video.pause();
+          }
+        }, 60);
+      }
+
+      // Add high-tech genius fade-out class
+      overlay.classList.add('intro-fade-out');
+
+      setTimeout(() => {
+        overlay.style.display = 'none';
+        if (video) {
+          video.pause();
+          video.currentTime = 0;
+        }
+        window.removeEventListener('keydown', handleIntroKeydown);
+        onCinematicIntroFinished();
+      }, 1100);
+    }
+
+    function replayCinematicIntro() {
+      const overlay = document.getElementById('cinematicIntroOverlay');
+      const video = document.getElementById('introVideo');
+      if (!overlay || !video) return;
+
+      introFinished = false;
+      overlay.style.display = 'flex';
+      overlay.classList.remove('intro-fade-out');
+
+      video.currentTime = 0;
+      video.muted = false;
+      video.volume = 1.0;
+      updateIntroAudioUi();
+
+      window.addEventListener('keydown', handleIntroKeydown);
+
+      video.play().then(() => {
+        const badge = document.getElementById('introPlayBadge');
+        if (badge) badge.classList.add('opacity-0');
+      }).catch(err => {
+        video.muted = true;
+        updateIntroAudioUi();
+        video.play().catch(console.error);
+      });
+    }
+
+    function onCinematicIntroFinished() {
+      // Once intro finishes, check ElevenLabs onboarding gate
+      const savedKey = (state.speechSettings.elevenlabsKey || '').trim();
+      if (!savedKey || savedKey.length < 10) {
+        setTimeout(openElevenLabsGateModal, 350);
+      } else if (!localStorage.getItem(CONFIG.STORAGE_LANG_KEY)) {
+        setTimeout(openLanguageModal, 350);
+      }
+    }
+
+    /**
+     * ElevenLabs Mandatory Onboarding Gate Modal Controls
+     */
+    function openElevenLabsGateModal() {
+      if (elements.elevenLabsGateModal) {
+        elements.elevenLabsGateModal.classList.remove('hidden');
+        const clearBtn = document.getElementById('elevenGateClearBtn');
+        const key = (state.speechSettings.elevenlabsKey || '').trim();
+        if (clearBtn) {
+          if (key.length >= 10) {
+            clearBtn.classList.remove('hidden');
+          } else {
+            clearBtn.classList.add('hidden');
+          }
+        }
+        if (elements.elevenGateKeyInput) {
+          elements.elevenGateKeyInput.value = key;
+          setTimeout(() => elements.elevenGateKeyInput.focus(), 100);
+        }
+      }
+    }
+
+    function closeElevenLabsGateModal() {
+      if (elements.elevenLabsGateModal) {
+        elements.elevenLabsGateModal.classList.add('hidden');
+      }
+    }
+
+    function clearElevenLabsGateKey() {
+      state.speechSettings.elevenlabsKey = '';
+      localStorage.removeItem(CONFIG.STORAGE_ELEVEN_KEY);
+      if (elements.elevenGateKeyInput) elements.elevenGateKeyInput.value = '';
+      updateElevenKeyHeaderBadge();
+      updateDebaterVoiceBadges();
+      updateElevenKeyIntroBanner();
+      const clearBtn = document.getElementById('elevenGateClearBtn');
+      if (clearBtn) clearBtn.classList.add('hidden');
+      closeElevenLabsGateModal();
+      showToast('ElevenLabs key removed. Arena requires a key to debate.', 'info');
+    }
+
+    function toggleElevenGateKeyVisibility() {
+      if (!elements.elevenGateKeyInput) return;
+      const isPwd = elements.elevenGateKeyInput.type === 'password';
+      elements.elevenGateKeyInput.type = isPwd ? 'text' : 'password';
+      if (elements.elevenGateKeyVisibilityText) {
+        elements.elevenGateKeyVisibilityText.textContent = isPwd ? 'Hide' : 'Show';
+      }
+    }
+
+    function saveElevenLabsGateKey() {
+      if (!elements.elevenGateKeyInput) return;
+      const key = elements.elevenGateKeyInput.value.trim();
+      if (!key || key.length < 10) {
+        showToast('Please enter a valid ElevenLabs API key.', 'warning');
+        return;
+      }
+      state.speechSettings.elevenlabsKey = key;
+      state.speechSettings.engine = 'elevenlabs';
+      localStorage.setItem(CONFIG.STORAGE_ELEVEN_KEY, key);
+      localStorage.setItem(CONFIG.STORAGE_VOICE_ENGINE_KEY, 'elevenlabs');
+      updateElevenKeyHeaderBadge();
+      updateDebaterVoiceBadges();
+      closeElevenLabsGateModal();
+      showToast('⚡ ElevenLabs Key Activated! Arena Studio voices ready.', 'success');
+    }
+
+    function updateElevenKeyHeaderBadge() {
+      const btn = elements.elevenKeyHeaderBtn;
+      const text = elements.elevenKeyHeaderText;
+      const dot = elements.elevenKeyHeaderStatus;
+      if (!btn || !text || !dot) return;
+
+      const key = (state.speechSettings.elevenlabsKey || '').trim();
+      if (key.length >= 10) {
+        text.textContent = 'ElevenLabs Active';
+        dot.className = 'w-2 h-2 rounded-full bg-emerald-400 shadow-sm shadow-emerald-400 animate-pulse';
+        btn.className = 'flex items-center space-x-1.5 px-3 py-1.5 rounded-lg ctrl-btn text-xs font-semibold shadow-sm text-emerald-300 border border-emerald-500/40 bg-emerald-950/30 hover:border-emerald-400 transition';
+        btn.title = 'ElevenLabs Studio Key Connected • Click to change';
+      } else {
+        text.textContent = 'Connect Key ⚡';
+        dot.className = 'w-2 h-2 rounded-full bg-amber-400 animate-pulse';
+        btn.className = 'flex items-center space-x-1.5 px-3 py-1.5 rounded-lg ctrl-btn text-xs font-semibold shadow-sm text-purple-300 border border-purple-500/40 bg-purple-950/30 hover:border-purple-400 transition';
+        btn.title = 'ElevenLabs API Key Required to start debates';
+      }
+
+      updateElevenKeyIntroBanner();
+    }
+
+    function updateElevenKeyIntroBanner() {
+      const banner = elements.elevenKeyIntroBanner;
+      if (!banner) return;
+      const key = (state.speechSettings.elevenlabsKey || '').trim();
+      if (key.length >= 10) {
+        banner.className = 'w-full p-4 rounded-2xl border border-emerald-500/30 bg-gradient-to-r from-emerald-950/40 via-slate-900/90 to-cyan-950/40 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs transition-all duration-300 text-left';
+        banner.innerHTML = `
+          <div class="flex items-center gap-3">
+            <span class="w-3 h-3 rounded-full bg-emerald-400 shadow-md shadow-emerald-400 animate-pulse flex-shrink-0"></span>
+            <div>
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="font-bold text-white text-xs sm:text-sm">ElevenLabs Multilingual v2 AI Active</span>
+                <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-semibold font-mono">Arena Unlocked</span>
+              </div>
+              <p class="text-slate-400 text-[11px] mt-0.5">Authentic human debate voices enabled for Arabic, English, and all global languages.</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 flex-shrink-0">
+            <button onclick="openElevenLabsGateModal()" class="px-3.5 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 text-purple-300 hover:text-white border border-slate-700 text-xs font-semibold transition flex items-center gap-1.5">
+              <span>Manage Key</span> ⚡
+            </button>
+          </div>
+        `;
+      } else {
+        banner.className = 'w-full p-5 sm:p-6 rounded-2xl border border-purple-500/50 bg-gradient-to-br from-purple-950/90 via-slate-900/95 to-indigo-950/90 shadow-2xl shadow-purple-950/60 text-left transition-all duration-300';
+        banner.innerHTML = `
+          <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
+            <div class="flex items-start gap-4">
+              <div class="w-12 h-12 rounded-2xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-2xl text-purple-300 flex-shrink-0 animate-pulse mt-0.5">
+                ⚡
+              </div>
+              <div class="space-y-2">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span class="font-display font-bold text-xs sm:text-sm text-purple-200 uppercase tracking-wider">
+                    ⚠️ Mandatory Platform Requirement: ElevenLabs API Key Needed
+                  </span>
+                  <span class="text-[10px] px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30 font-semibold font-mono">
+                    إلزامي لتشغيل المنصة
+                  </span>
+                  <span class="text-[10px] px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-semibold">
+                    10,000 Chars Free
+                  </span>
+                </div>
+                <p class="text-xs text-slate-300 leading-relaxed">
+                  To experience high-stakes AI debates with cinema-quality, human-sounding voices (including fluent, native Arabic pronunciation), this platform <strong class="text-white">strictly requires a free ElevenLabs API Key</strong> to operate.
+                </p>
+                <div class="p-3 rounded-xl bg-purple-950/50 border border-purple-500/30 text-xs text-purple-200 leading-relaxed" dir="rtl">
+                  📢 <strong>تنبيه هام لكافة الزوار:</strong> هذا الموقع لا يعمل إلا بوجود مفتاح <strong>ElevenLabs API</strong> مجاني. المنصة مصممة لتعمل حصرياً بمحرك الأصوات البشرية الفائقة الواقعية (للعربية والإنجليزية وكافة اللغات) بدون أصوات روبوتية. التسجيل مجاني 100% وبدون أي بطاقة دفع خلال 30 ثانية.
+                </div>
+                <div class="flex items-center gap-3 pt-1 text-[11px] text-slate-400 flex-wrap">
+                  <span class="flex items-center gap-1 text-emerald-400 font-medium">✓ 100% Free Forever</span>
+                  <span class="text-slate-600">•</span>
+                  <span class="flex items-center gap-1 text-emerald-400 font-medium">✓ 10,000 Chars / Month</span>
+                  <span class="text-slate-600">•</span>
+                  <span class="flex items-center gap-1 text-emerald-400 font-medium">✓ No Credit Card Required</span>
+                  <span class="text-slate-600">•</span>
+                  <span class="flex items-center gap-1 text-purple-300 font-medium">✓ Ready in 30 Seconds</span>
+                </div>
+              </div>
+            </div>
+            <div class="flex-shrink-0 w-full md:w-auto flex flex-col sm:flex-row md:flex-col gap-2">
+              <button onclick="openElevenLabsGateModal()" class="w-full px-6 py-3 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-500 hover:from-purple-500 hover:to-cyan-400 text-white font-bold text-xs tracking-wider shadow-lg shadow-purple-900/50 transition transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2 whitespace-nowrap">
+                <span>Connect Free API Key</span> ⚡
+              </button>
+              <a href="https://elevenlabs.io" target="_blank" rel="noopener noreferrer" class="text-[11px] text-center text-purple-400 hover:text-purple-300 underline font-medium">
+                Get Free Key at elevenlabs.io ↗
+              </a>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    /**
+     * ElevenLabs Monthly Quota Modal Controls
+     */
+    function openElevenLabsQuotaModal(errMsg) {
+      if (elements.elevenLabsQuotaModal) {
+        elements.elevenLabsQuotaModal.classList.remove('hidden');
+        if (elements.elevenQuotaNewKeyInput) {
+          elements.elevenQuotaNewKeyInput.value = '';
+          setTimeout(() => elements.elevenQuotaNewKeyInput.focus(), 100);
+        }
+      }
+    }
+
+    function closeElevenLabsQuotaModal() {
+      if (elements.elevenLabsQuotaModal) {
+        elements.elevenLabsQuotaModal.classList.add('hidden');
+      }
+    }
+
+    function saveKeyFromQuotaModal() {
+      if (!elements.elevenQuotaNewKeyInput) return;
+      const newKey = elements.elevenQuotaNewKeyInput.value.trim();
+      if (!newKey || newKey.length < 10) {
+        showToast('Please enter a valid ElevenLabs key.', 'warning');
+        return;
+      }
+      state.speechSettings.elevenlabsKey = newKey;
+      state.speechSettings.engine = 'elevenlabs';
+      localStorage.setItem(CONFIG.STORAGE_ELEVEN_KEY, newKey);
+      updateElevenKeyHeaderBadge();
+      updateDebaterVoiceBadges();
+      closeElevenLabsQuotaModal();
+      showToast('⚡ Fresh ElevenLabs Key saved! Resuming arena...', 'success');
+    }
+
+    function continueWithFallbackVoices() {
+      state.speechSettings.engine = 'browser';
+      closeElevenLabsQuotaModal();
+      showToast('Switched to Free High-Definition Voices fallback.', 'info');
+    }
+
+    /**
+     * Test single persona voice
+     */
+    async function testVoice(speaker) {
+      const elevenKey = (state.speechSettings.elevenlabsKey || '').trim();
+      if (!elevenKey || elevenKey.length < 10) {
+        openElevenLabsGateModal();
+        showToast('Please activate your ElevenLabs API Key first.', 'warning');
+        return;
+      }
+
+      const testPhrases = {
+        en: {
+          alpha: "I am Titan Alpha. Logic and visionary ambition will dominate this arena with absolute precision.",
+          beta: "I am Titan Beta. Empirical reality and critical reason will dismantle any rigid dogma.",
+          judge: "I am Arbiter Prime. I judge every argument with imperial rigor and absolute impartiality."
+        },
+        ar: {
+          alpha: "أنا تايتن ألفا. المنطق الصارم والرؤية الثورية ستحسم هذه المناظرة بكل جدارة.",
+          beta: "أنا تايتن بيتا. البرهان الواقعي والتحليل النقدي سيكشفان كل مغالطة.",
+          judge: "أنا أربيتر برايم. أحكم بحيادية تامة ومقاييس فكرية صارمة لإعلان الفائز النهائي."
+        }
+      };
+
+      const langKey = state.language.code.startsWith('ar') ? 'ar' : 'en';
+      const phrase = testPhrases[langKey][speaker] || testPhrases.en[speaker];
+
+      showToast('Testing ' + speaker.toUpperCase() + ' voice with ElevenLabs...', 'info');
+      await speakText(phrase, speaker);
+    }
+
+    /**
+     * Test all three voices sequentially
+     */
+    async function testAllThreeVoices() {
+      await testVoice('alpha');
+      await new Promise(r => setTimeout(r, 600));
+      await testVoice('beta');
+      await new Promise(r => setTimeout(r, 600));
+      await testVoice('judge');
+    }
+
+    /**
+     * Splits debate text into clean, grammatical sentence chunks.
+     * Prevents browser 15s freeze bug, provides natural breathing cadence,
+     * and guarantees 100% speech completion without mid-speech cutoffs.
+     */
+    function splitIntoSentences(text) {
+      if (!text) return [];
+      const clean = text
+        .replace(/[\*#_`~\[\]()]/g, '')
+        .replace(/https?:\/\/\S+/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+      const rawClauses = clean.match(/[^.!?؟;\n]+[.!?؟;\n]*/g) || [clean];
+      const sentences = [];
+
+      rawClauses.forEach(clause => {
+        let trimmed = clause.trim();
+        if (!trimmed) return;
+        if (trimmed.length > 130) {
+          const parts = trimmed.split(/[,،]+/).map(p => p.trim()).filter(Boolean);
+          let buf = '';
+          for (let i = 0; i < parts.length; i++) {
+            buf += (buf ? ', ' : '') + parts[i];
+            if (buf.length > 60 || i === parts.length - 1) {
+              sentences.push(buf.trim());
+              buf = '';
+            }
+          }
+          if (buf.trim()) sentences.push(buf.trim());
+        } else {
+          sentences.push(trimmed);
+        }
+      });
+
+      return sentences
+        .map(s => s.replace(/^[,،;؛.\s]+/, '').trim())
+        .filter(s => s.length > 0);
+    }
+
+    /**
+     * Enhanced Realistic Voice Selection per Language and Persona
+     * Prioritizes high-definition Natural/Online/Google neural voices.
+     * Guarantees distinctly different voices for AI Alpha, AI Beta, and Supreme Arbiter.
+     */
+    function findBestVoiceForLanguage(langCode, speakerRole = 'alpha') {
+      if (!('speechSynthesis' in window)) return null;
+      const allVoices = window.speechSynthesis.getVoices();
+      if (!allVoices || allVoices.length === 0) return null;
+
+      const langPrefix = (langCode || 'en').split('-')[0].toLowerCase();
+
+      // Legacy robotic filter: Exclude old 90s SAPI voices when modern natural voices exist
+      const isRobotic = (name) => {
+        const l = name.toLowerCase();
+        return l.includes('naayf') || (l.includes('desktop') && !l.includes('natural'));
+      };
+
+      let matching = allVoices.filter(v => 
+        v.lang.toLowerCase().replace('_', '-').startsWith(langPrefix)
+      );
+
+      const modernMatching = matching.filter(v => !isRobotic(v.name));
+      const pool = (modernMatching.length > 0) ? modernMatching : (matching.length > 0 ? matching : allVoices);
+
+      // Quality score bonus: Reward modern neural/natural online voices
+      function scoreVoice(v) {
+        const n = v.name.toLowerCase();
+        let s = 0;
+        if (n.includes('natural')) s += 160;
+        if (n.includes('online')) s += 120;
+        if (n.includes('neural')) s += 100;
+        if (n.includes('google')) s += 70;
+        if (n.includes('enhanced')) s += 50;
+        if (n.includes('premium')) s += 40;
+        if (isRobotic(v.name)) s -= 300;
+        return s;
+      }
+
+      const sorted = [...pool].sort((a, b) => scoreVoice(b) - scoreVoice(a));
+
+      // 1. Specialized Arabic Persona Matching (Pure Human Classical & Regional Voices)
+      if (langPrefix === 'ar') {
+        const arAlphaKeywords = ['hamed', 'hamid', 'maged', 'tarik', 'tariq', 'male', 'shakir'];
+        const arBetaKeywords = ['salma', 'zariyah', 'zeina', 'laila', 'fatima', 'hoda', 'sana', 'female'];
+        const arJudgeKeywords = ['shakir', 'hazem', 'bassam', 'maged', 'hamed'];
+
+        const alpha = sorted.find(v => arAlphaKeywords.some(k => v.name.toLowerCase().includes(k))) || sorted[0];
+        const beta = sorted.find(v => v !== alpha && arBetaKeywords.some(k => v.name.toLowerCase().includes(k))) 
+                  || sorted.find(v => v !== alpha) 
+                  || sorted[0];
+        const judge = sorted.find(v => v !== alpha && v !== beta && arJudgeKeywords.some(k => v.name.toLowerCase().includes(k))) 
+                   || sorted.find(v => v !== alpha && v !== beta) 
+                   || sorted[0];
+
+        if (speakerRole === 'alpha') return alpha;
+        if (speakerRole === 'beta') return beta;
+        return judge;
+      }
+
+      // 2. English & International Persona Matching
+      const maleKeywords = ['christopher', 'guy', 'eric', 'david', 'mark', 'andrew', 'male', 'james', 'george'];
+      const femaleKeywords = ['jenny', 'aria', 'salma', 'sonia', 'michelle', 'emma', 'samantha', 'female', 'victoria'];
+      const arbiterKeywords = ['brian', 'george', 'steffan', 'oliver', 'william', 'daniel', 'broadcaster', 'natural'];
+
+      const alphaVoice = sorted.find(v => maleKeywords.some(k => v.name.toLowerCase().includes(k))) || sorted[0];
+      const betaVoice = sorted.find(v => v !== alphaVoice && femaleKeywords.some(k => v.name.toLowerCase().includes(k))) 
+                     || sorted.find(v => v !== alphaVoice) 
+                     || sorted[0];
+      const judgeVoice = sorted.find(v => v !== alphaVoice && v !== betaVoice && arbiterKeywords.some(k => v.name.toLowerCase().includes(k))) 
+                      || sorted.find(v => v !== alphaVoice && v !== betaVoice) 
+                      || sorted[0];
+
+      if (speakerRole === 'alpha') return alphaVoice;
+      if (speakerRole === 'beta') return betaVoice;
+      return judgeVoice;
+    }
+
+    /**
+     * Unified Speech Synthesis Controller
+     * Guarantees 100% full speech completion before the next turn begins.
+     */
+    async function speakText(text, speaker = 'alpha') {
+      const cleanSpokenText = text
+        .replace(/[\*#_`~\[\]()]/g, '')
+        .replace(/https?:\/\/\S+/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+      if (!cleanSpokenText) return;
+
+      // If audio is muted by user, wait natural reading duration so debate is readable
+      if (!state.audioEnabled) {
+        updateSpeakerUiState(speaker, true);
+        const wordCount = cleanSpokenText.split(/\s+/).filter(Boolean).length;
+        const waitMs = Math.min(Math.max(wordCount * 170, 2800), 10000);
+        await new Promise(resolve => setTimeout(resolve, waitMs));
+        updateSpeakerUiState(speaker, false);
+        return;
+      }
+
+      stopCurrentAudio();
+
+      const engine = state.speechSettings.engine;
+
+      // 1. Native High-Definition Neural Speech (100% Free Forever, Default, Zero Setup, Zero Robots)
+      if (engine === 'browser' || !engine) {
+        await speakBrowser(cleanSpokenText, speaker);
+        return;
+      }
+
+      // 2. Fish Audio Generative Voice Engine (Only if explicit working key provided)
+      if (engine === 'fish' && state.speechSettings.fishKey) {
+        try {
+          await speakFishAudio(cleanSpokenText, speaker);
+          return;
+        } catch (err) {
+          console.warn("Fish Audio TTS failed, smoothly using Free HD Voices:", err);
+          await speakBrowser(cleanSpokenText, speaker);
+          return;
+        }
+      }
+
+      // 3. Google Cloud TTS Engine (1M Free Characters Every Month)
+      if (engine === 'google' && state.speechSettings.googleKey) {
+        try {
+          await speakGoogleCloud(cleanSpokenText, speaker);
+          return;
+        } catch (err) {
+          console.warn("Google Cloud TTS failed, smoothly using Free HD Voices:", err);
+          await speakBrowser(cleanSpokenText, speaker);
+          return;
+        }
+      }
+
+      // 4. ElevenLabs API Engine (if key configured)
+      if (engine === 'elevenlabs' && state.speechSettings.elevenlabsKey) {
+        try {
+          await speakElevenLabs(cleanSpokenText, speaker);
+          return;
+        } catch (err) {
+          console.warn("ElevenLabs TTS failed, smoothly using Free HD Voices:", err);
+          await speakBrowser(cleanSpokenText, speaker);
+          return;
+        }
+      }
+
+      // 5. OpenAI TTS Engine
+      if (engine === 'openai' && state.speechSettings.openaiKey) {
+        try {
+          await speakOpenAI(cleanSpokenText, speaker);
+          return;
+        } catch (err) {
+          console.warn("OpenAI TTS failed, smoothly using Free HD Voices:", err);
+          await speakBrowser(cleanSpokenText, speaker);
+          return;
+        }
+      }
+
+      // Fallback
+      await speakBrowser(cleanSpokenText, speaker);
+    }
+
+    /**
+     * Fish Audio Hyper-Realistic Generative Speech Engine
+     * Generates human breaths, emotional inflections, and studio clarity.
+     */
+    function speakFishAudio(text, speaker = 'alpha') {
+      return new Promise(async (resolve, reject) => {
+        try {
+          const defaultVoice = (speaker === 'alpha')
+            ? '7f92f8afb8ec43bf81429cc1c9199cb1'
+            : (speaker === 'beta')
+            ? '2c29c8e1d6704ee0b3b44b6ccbb65910'
+            : '675ccb9aa77f4e9596395dc481b7e42d';
+
+          const voiceId = state.speechSettings.assignedVoices.fish?.[speaker] || defaultVoice;
+
+          const response = await fetch('https://api.fish.audio/v1/tts', {
+            method: 'POST',
+            headers: {
+              'Authorization': 'Bearer ' + state.speechSettings.fishKey.trim(),
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              text: text,
+              reference_id: voiceId,
+              format: 'mp3',
+              latency: 'normal',
+              normalize: true
+            })
+          });
+
+          if (!response.ok) {
+            const errText = await response.text().catch(() => '');
+            throw new Error('Fish Audio HTTP ' + response.status + (errText ? ': ' + errText.slice(0, 80) : ''));
+          }
+
+          const blob = await response.blob();
+          const audioUrl = URL.createObjectURL(blob);
+          const audio = new Audio(audioUrl);
+          state.activeAudio = audio;
+          audio.playbackRate = state.speechSettings.rate || 1.0;
+
+          audio.onplay = () => updateSpeakerUiState(speaker, true);
+          audio.onended = () => {
+            updateSpeakerUiState(speaker, false);
+            URL.revokeObjectURL(audioUrl);
+            state.activeAudio = null;
+            resolve();
+          };
+          audio.onerror = (e) => {
+            updateSpeakerUiState(speaker, false);
+            URL.revokeObjectURL(audioUrl);
+            state.activeAudio = null;
+            reject(new Error("Fish Audio playback error"));
+          };
+
+          await audio.play();
+        } catch (err) {
+          reject(err);
+        }
+      });
+    }
+
+    /**
+     * Google Cloud Text-to-Speech Engine
+     * Uses Journey & Neural2 Ultra-Realistic Human Voices (1,000,000 Free Characters / Mo)
+     */
+    function speakGoogleCloud(text, speaker = 'alpha') {
+      return new Promise(async (resolve, reject) => {
+        try {
+          const isArabic = state.language.code.startsWith('ar');
+          const defaultVoice = isArabic 
+            ? (speaker === 'alpha' ? 'ar-XA-Wavenet-B' : speaker === 'beta' ? 'ar-XA-Wavenet-A' : 'ar-XA-Wavenet-C')
+            : (speaker === 'alpha' ? 'en-US-Journey-D' : speaker === 'beta' ? 'en-US-Journey-F' : 'en-US-Neural2-J');
+
+          const voiceName = state.speechSettings.assignedVoices.google?.[speaker] || defaultVoice;
+          const langCode = voiceName.startsWith('ar-') ? 'ar-XA' : (voiceName.slice(0, 5) || (isArabic ? 'ar-XA' : 'en-US'));
+
+          const response = await fetch('https://texttospeech.googleapis.com/v1/text:synthesize?key=' + state.speechSettings.googleKey.trim(), {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              input: { text: text },
+              voice: {
+                languageCode: langCode,
+                name: voiceName
+              },
+              audioConfig: {
+                audioEncoding: 'MP3',
+                speakingRate: state.speechSettings.rate || 1.05,
+                pitch: 0.0
+              }
+            })
+          });
+
+          if (!response.ok) {
+            const errData = await response.json().catch(() => ({}));
+            throw new Error('Google Cloud HTTP ' + response.status + ': ' + (errData.error?.message || 'Synthesis failed'));
+          }
+
+          const data = await response.json();
+          if (!data.audioContent) {
+            throw new Error("No audioContent returned by Google Cloud TTS");
+          }
+
+          const audio = new Audio("data:audio/mp3;base64," + data.audioContent);
+          state.activeAudio = audio;
+          audio.playbackRate = state.speechSettings.rate || 1.0;
+
+          audio.onplay = () => updateSpeakerUiState(speaker, true);
+          audio.onended = () => {
+            updateSpeakerUiState(speaker, false);
+            state.activeAudio = null;
+            resolve();
+          };
+          audio.onerror = (e) => {
+            updateSpeakerUiState(speaker, false);
+            state.activeAudio = null;
+            reject(new Error("Google Cloud audio playback error"));
+          };
+
+          await audio.play();
+        } catch (err) {
+          reject(err);
+        }
+      });
+    }
+
+    /**
+     * ElevenLabs Hyper-Realistic Studio Voice Player
+     */
+    function speakElevenLabs(text, speaker) {
+      return new Promise(async (resolve, reject) => {
+        try {
+          const elevenKey = (state.speechSettings.elevenlabsKey || '').trim();
+          if (!elevenKey || elevenKey.length < 10) {
+            openElevenLabsGateModal();
+            throw new Error('ElevenLabs API Key required');
+          }
+
+          const assigned = state.speechSettings.assignedVoices?.elevenlabs || LOCKED_DEFAULT_VOICES.elevenlabs;
+          const voiceId = assigned[speaker] || LOCKED_DEFAULT_VOICES.elevenlabs[speaker] || 'pNInz6obpgDQGcFmaJgB';
+
+          const response = await fetch('https://api.elevenlabs.io/v1/text-to-speech/' + voiceId, {
+            method: 'POST',
+            headers: {
+              'xi-api-key': elevenKey,
+              'Content-Type': 'application/json',
+              'Accept': 'audio/mpeg'
+            },
+            body: JSON.stringify({
+              text: text,
+              model_id: 'eleven_multilingual_v2',
+              voice_settings: {
+                stability: 0.5,
+                similarity_boost: 0.75,
+                style: 0.0,
+                use_speaker_boost: true
+              }
+            })
+          });
+
+          if (!response.ok) {
+            const errData = await response.json().catch(() => ({}));
+            const errMsg = errData.detail?.status || errData.detail?.message || ('HTTP ' + response.status);
+            console.warn('ElevenLabs API returned error:', response.status, errMsg);
+
+            // Check quota exhausted, unauthorized, or rate-limited
+            if (response.status === 401 || response.status === 429 || response.status === 402 || 
+                String(errMsg).toLowerCase().includes('quota') || 
+                String(errMsg).toLowerCase().includes('credit') ||
+                String(errMsg).toLowerCase().includes('limit') ||
+                String(errMsg).toLowerCase().includes('character')) {
+              openElevenLabsQuotaModal(errMsg);
+            }
+            throw new Error(`ElevenLabs (${response.status}): ${errMsg}`);
+          }
+
+          const blob = await response.blob();
+          const audioUrl = URL.createObjectURL(blob);
+          const audio = new Audio(audioUrl);
+          state.activeAudio = audio;
+          audio.playbackRate = state.speechSettings.rate || 1.0;
+
+          audio.onplay = () => updateSpeakerUiState(speaker, true);
+          audio.onended = () => {
+            updateSpeakerUiState(speaker, false);
+            URL.revokeObjectURL(audioUrl);
+            state.activeAudio = null;
+            resolve();
+          };
+          audio.onerror = (e) => {
+            updateSpeakerUiState(speaker, false);
+            URL.revokeObjectURL(audioUrl);
+            state.activeAudio = null;
+            reject(new Error("ElevenLabs audio decode error"));
+          };
+
+          await audio.play();
+        } catch (err) {
+          reject(err);
+        }
+      });
+    }
+
+    /**
+     * OpenAI TTS Engine Player
+     */
+    function speakOpenAI(text, speaker) {
+      return new Promise(async (resolve, reject) => {
+        try {
+          const voice = state.speechSettings.assignedVoices.openai?.[speaker] || 'alloy';
+          const response = await fetch('https://api.openai.com/v1/audio/speech', {
+            method: 'POST',
+            headers: {
+              'Authorization': 'Bearer ' + state.speechSettings.openaiKey.trim(),
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              model: 'tts-1',
+              voice: voice,
+              input: text,
+              speed: state.speechSettings.rate || 1.0
+            })
+          });
+
+          if (!response.ok) {
+            throw new Error('HTTP ' + response.status);
+          }
+
+          const blob = await response.blob();
+          const audioUrl = URL.createObjectURL(blob);
+          const audio = new Audio(audioUrl);
+          state.activeAudio = audio;
+
+          audio.onplay = () => updateSpeakerUiState(speaker, true);
+          audio.onended = () => {
+            updateSpeakerUiState(speaker, false);
+            URL.revokeObjectURL(audioUrl);
+            state.activeAudio = null;
+            resolve();
+          };
+          audio.onerror = (e) => {
+            updateSpeakerUiState(speaker, false);
+            URL.revokeObjectURL(audioUrl);
+            state.activeAudio = null;
+            reject(new Error("OpenAI audio error"));
+          };
+
+          await audio.play();
+        } catch (err) {
+          reject(err);
+        }
+      });
+    }
+
+    /**
+     * Native High-Fidelity Arabic Speech Streamer
+     * Solves the notorious issue where Windows/Chrome lack Arabic voice packs,
+     * preventing robotic English synthesizers (like David/Zira/Naayf) from garbling Arabic.
+     * Streams fluent native Arabic pronunciation with calibrated persona speeds!
+     */
+    async function speakArabicCloud(sentences, speaker = 'alpha') {
+      state.speechCanceled = false;
+      updateSpeakerUiState(speaker, true);
+
+      // Calibrated speed & pacing for distinct debater personas
+      let speedRate = 1.04;
+      if (speaker === 'alpha') speedRate = 1.08;      // Confident, punchy debate tempo
+      else if (speaker === 'beta') speedRate = 1.02; // Articulate, nuanced intellectual tempo
+      else speedRate = 0.96;                         // Solemn, authoritative judicial cadence
+
+      for (let i = 0; i < sentences.length; i++) {
+        if (state.speechCanceled) break;
+        const sentence = sentences[i].trim();
+        if (!sentence) continue;
+
+        await new Promise((resolve) => {
+          let resolved = false;
+          function done() {
+            if (resolved) return;
+            resolved = true;
+            resolve();
+          }
+
+          const encoded = encodeURIComponent(sentence);
+          const audioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=ar&client=tw-ob&q=${encoded}`;
+          const audio = new Audio(audioUrl);
+          state.activeAudio = audio;
+          audio.playbackRate = speedRate;
+
+          // Generous safety timer
+          const timer = setTimeout(done, Math.max(sentence.length * 160, 5000));
+
+          audio.onended = () => {
+            clearTimeout(timer);
+            state.activeAudio = null;
+            done();
+          };
+          audio.onerror = (e) => {
+            console.warn("Arabic stream playback notice:", e);
+            clearTimeout(timer);
+            state.activeAudio = null;
+            done();
+          };
+
+          audio.play().catch(err => {
+            console.warn("Audio autoplay notice:", err);
+            clearTimeout(timer);
+            done();
+          });
+        });
+
+        // Natural human micro-pause between sentences (90ms)
+        if (i < sentences.length - 1 && !state.speechCanceled) {
+          await new Promise(r => setTimeout(r, 90));
+        }
+      }
+
+      updateSpeakerUiState(speaker, false);
+    }
+
+    /**
+     * Master Sequential Speech Synthesis Player
+     * 
+     * Key Innovations:
+     * 1. 100% Speech Completion: Sentence chunking guarantees bot NEVER cuts off mid-speech.
+     * 2. Natural Human Tone: Pitch is kept in human range (0.97 - 1.02) to eliminate robotic vocoder artifacts.
+     * 3. Energetic Debate Speed: Rate is calibrated to 1.08x - 1.10x for punchy, lively debate delivery.
+     * 4. Natural Breathing: 90ms micro-pause between sentences sounds like a real human taking a breath.
+     * 5. Arabic Protection: Never allows non-Arabic or robotic SAPI synthesizers to mispronounce Arabic.
+     * 6. Chrome Heartbeat: Prevents browser engine from pausing long speeches.
+     */
+    async function speakBrowser(text, speaker = 'alpha') {
+      if (!('speechSynthesis' in window)) {
+        const words = text.split(/\s+/).filter(Boolean).length;
+        const waitMs = Math.max(words * 180, 2500);
+        updateSpeakerUiState(speaker, true);
+        await new Promise(r => setTimeout(r, waitMs));
+        updateSpeakerUiState(speaker, false);
+        return;
+      }
+
+      const sentences = splitIntoSentences(text);
+      if (sentences.length === 0) return;
+
+      // Select distinct high-definition voice for persona
+      const customVoiceName = state.speechSettings.assignedVoices.browser?.[speaker];
+      const allVoices = window.speechSynthesis.getVoices();
+      let selectedVoice = null;
+      if (customVoiceName && allVoices.length > 0) {
+        selectedVoice = allVoices.find(v => v.name === customVoiceName);
+      }
+      if (!selectedVoice) {
+        selectedVoice = findBestVoiceForLanguage(state.language.code, speaker);
+      }
+
+      // Specialized Arabic Quality Protection:
+      // If the language is Arabic, verify that the selected voice is truly an Arabic Natural voice.
+      // If the browser only has English voices (e.g. Chrome on Windows with David/Zira) or robotic Naayf,
+      // route seamlessly to speakArabicCloud so Arabic is pronounced by a fluent native speaker!
+      const isArabic = state.language.code.startsWith('ar');
+      const voiceIsArabic = selectedVoice && selectedVoice.lang && selectedVoice.lang.toLowerCase().replace('_', '-').startsWith('ar');
+      const voiceIsNatural = selectedVoice && /natural|online|neural/i.test(selectedVoice.name);
+
+      if (isArabic && (!voiceIsArabic || (!voiceIsNatural && selectedVoice.name.toLowerCase().includes('naayf')))) {
+        await speakArabicCloud(sentences, speaker);
+        return;
+      }
+
+      // Natural Human Pitch & Energetic Debate Speed Calibration:
+      // Subtle pitch difference (0.97 vs 1.02) preserves human warmth without robotic distortion
+      let pitch = 1.0;
+      let rate = state.speechSettings.rate || 1.08;
+
+      if (speaker === 'alpha') {
+        pitch = state.speechSettings.alphaPitch || 0.97; // Warm, subtle baritone resonance (natural human, zero robotic distortion)
+        rate = (state.speechSettings.rate || 1.0) * 1.10; // Energetic, confident, punchy debate tempo
+      } else if (speaker === 'beta') {
+        pitch = state.speechSettings.betaPitch || 1.02; // Crisp, bright, articulate resonance (natural human, zero robotic distortion)
+        rate = (state.speechSettings.rate || 1.0) * 1.08; // Articulate, fluid, intellectual tempo
+      } else {
+        pitch = 1.00; // Formal, balanced judicial timbre
+        rate = (state.speechSettings.rate || 1.0) * 1.02; // Stately, dignified verdict cadence
+      }
+
+      state.speechCanceled = false;
+      updateSpeakerUiState(speaker, true);
+
+      // Play each sentence sequentially to 100% completion
+      for (let i = 0; i < sentences.length; i++) {
+        if (state.speechCanceled) break;
+
+        const sentence = sentences[i];
+        await new Promise((resolveSentence) => {
+          let isResolved = false;
+          let safetyTimer = null;
+          let resumeInterval = null;
+
+          function finishSentence() {
+            if (isResolved) return;
+            isResolved = true;
+            if (safetyTimer) clearTimeout(safetyTimer);
+            if (resumeInterval) clearInterval(resumeInterval);
+            resolveSentence();
+          }
+
+          // Generous safety timer per sentence so it never hangs indefinitely
+          safetyTimer = setTimeout(finishSentence, Math.max(sentence.length * 150, 6000));
+
+          // Chrome heartbeat pulse every 3s
+          resumeInterval = setInterval(() => {
+            if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+              window.speechSynthesis.pause();
+              window.speechSynthesis.resume();
+            }
+          }, 3000);
+
+          try {
+            const utterance = new SpeechSynthesisUtterance(sentence);
+            utterance.lang = state.language.code;
+            utterance.pitch = pitch;
+            utterance.rate = rate;
+            if (selectedVoice) utterance.voice = selectedVoice;
+
+            utterance.onend = () => finishSentence();
+            utterance.onerror = (err) => {
+              console.warn("Utterance notice:", err);
+              finishSentence();
+            };
+
+            window.speechSynthesis.speak(utterance);
+          } catch (e) {
+            console.warn("Speech synthesis error on chunk:", e);
+            finishSentence();
+          }
+        });
+
+        // Natural micro-pause between sentences (90ms) - human breathing rhythm
+        if (i < sentences.length - 1 && !state.speechCanceled) {
+          await new Promise(r => setTimeout(r, 90));
+        }
+      }
+
+      updateSpeakerUiState(speaker, false);
+    }
+
+    /**
+     * Active Speaker UI State Synchronization
+     */
+    function updateSpeakerUiState(speaker, isSpeaking) {
+      if (speaker === 'alpha') {
+        if (isSpeaking) {
+          elements.avatarAlpha.classList.add('active-speaker-alpha');
+          elements.waveAlpha.classList.add('sound-animated');
+          elements.badgeAlpha.textContent = 'TALKING';
+          elements.badgeAlpha.className = 'text-[10px] font-sans font-bold px-2 py-0.5 rounded-full bg-rose-500 text-white border border-rose-400 animate-pulse';
+          elements.streamProgressContainer.classList.remove('hidden');
+          elements.streamSpeakerName.textContent = 'AI Alpha Speaking...';
+          elements.streamSpeakerName.className = 'font-bold text-rose-400';
+        } else {
+          elements.avatarAlpha.classList.remove('active-speaker-alpha');
+          elements.waveAlpha.classList.remove('sound-animated');
+          elements.badgeAlpha.textContent = 'LISTENING';
+          elements.badgeAlpha.className = 'text-[10px] font-sans font-bold px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700';
+          elements.streamProgressContainer.classList.add('hidden');
+        }
+      } else if (speaker === 'beta') {
+        if (isSpeaking) {
+          elements.avatarBeta.classList.add('active-speaker-beta');
+          elements.waveBeta.classList.add('sound-animated');
+          elements.badgeBeta.textContent = 'TALKING';
+          elements.badgeBeta.className = 'text-[10px] font-sans font-bold px-2 py-0.5 rounded-full bg-cyan-400 text-slate-950 border border-cyan-300 animate-pulse';
+          elements.streamProgressContainer.classList.remove('hidden');
+          elements.streamSpeakerName.textContent = 'AI Beta Speaking...';
+          elements.streamSpeakerName.className = 'font-bold text-cyan-400';
+        } else {
+          elements.avatarBeta.classList.remove('active-speaker-beta');
+          elements.waveBeta.classList.remove('sound-animated');
+          elements.badgeBeta.textContent = 'LISTENING';
+          elements.badgeBeta.className = 'text-[10px] font-sans font-bold px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700';
+          elements.streamProgressContainer.classList.add('hidden');
+        }
+      } else if (speaker === 'judge') {
+        if (isSpeaking) {
+          elements.streamProgressContainer.classList.remove('hidden');
+          elements.streamSpeakerName.textContent = 'Supreme Arbiter Pronouncing Verdict...';
+          elements.streamSpeakerName.className = 'font-bold text-amber-400';
+        } else {
+          elements.streamProgressContainer.classList.add('hidden');
+        }
+      }
+    }
+
+    /**
+     * Copy Full Debate Transcript to Clipboard
+     */
+    function copyFullTranscript() {
+      if (!state.transcript || state.transcript.length === 0) {
+        showToast('Transcript is currently empty.', 'warning');
+        return;
+      }
+      let fullText = '=== AI ARENA: THE ULTIMATE IDEA BATTLE ===\n';
+      fullText += 'Language: ' + state.language.name + ' (' + state.language.code + ')\n';
+      fullText += 'Topic: ' + elements.ideaInputA.value + ' VS ' + elements.ideaInputB.value + '\n\n';
+      
+      state.transcript.forEach(t => {
+        const spk = t.speaker === 'alpha' ? 'AI ALPHA' : 'AI BETA';
+        fullText += '[' + t.roundTitle + '] ' + spk + ':\n' + t.text + '\n\n';
+      });
+
+      if (state.verdictData) {
+        fullText += '=== SUPREME ARBITER VERDICT ===\n';
+        fullText += 'Winner: ' + (state.verdictData.winner || 'Synthesis') + '\n';
+        fullText += 'Summary: ' + state.verdictData.verdictSummary + '\n';
+      }
+
+      navigator.clipboard.writeText(fullText).then(() => {
+        showToast('Full debate transcript copied to clipboard!', 'success');
+      }).catch(() => {
+        showToast('Failed to copy to clipboard.', 'error');
+      });
+    }
+
+    function clearTranscriptView() {
+      if (state.isBattling) return;
+      elements.transcriptFeed.innerHTML = `
+        <div class="h-48 flex flex-col items-center justify-center text-slate-500 space-y-3">
+          <div class="w-12 h-12 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-600 text-xl">
+            💬
+          </div>
+          <div class="text-xs text-center">
+            Transcript cleared. Ready for next battle.
+          </div>
+        </div>
+      `;
+      showToast('Transcript view cleared.', 'info');
+    }
+    /**
+     * Groq API Direct Async Request with Auto-Fallback
+     */
+    async function callGroqChat(messages, temperature = 0.7, jsonMode = false) {
+      if (!state.apiKey) {
+        throw new Error("Missing Groq API Key! Please enter your key in the header configuration.");
+      }
+
+      const requestPayload = {
+        model: state.model,
+        messages: messages,
+        temperature: temperature,
+        max_tokens: jsonMode ? 700 : 250
+      };
+
+      if (jsonMode) {
+        requestPayload.response_format = { type: "json_object" };
+      }
+
+      let response = await fetch(CONFIG.GROQ_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${state.apiKey.trim()}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(requestPayload)
+      });
+
+      // Resilient Fallback to verified fast model if requested model is not found
+      if (!response.ok && response.status === 404 && state.model !== 'qwen/qwen3.8-27b') {
+        console.warn(`Model ${state.model} unavailable. Engaging auto-fallback to qwen/qwen3.8-27b.`);
+        state.model = 'qwen/qwen3.8-27b';
+        if (elements.modelSelect) elements.modelSelect.value = 'qwen/qwen3.8-27b';
+        if (elements.activeModelLabel) elements.activeModelLabel.textContent = 'qwen/qwen3.8-27b';
+        requestPayload.model = 'qwen/qwen3.8-27b';
+
+        response = await fetch(CONFIG.GROQ_ENDPOINT, {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${state.apiKey.trim()}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(requestPayload)
+        });
+      }
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        const errMessage = errorData.error?.message || `Groq API HTTP Error ${response.status}`;
+        throw new Error(errMessage);
+      }
+
+      const data = await response.json();
+      return data.choices[0].message.content;
+    }
+
+    /**
+     * Main Battle Execution Engine: 100% Balanced 3-Round Debate Loop
+     */
+    async function startBattle() {
+      // 1. Mandatory ElevenLabs API Key Check: Arena only works when key is connected
+      const elevenKey = (state.speechSettings.elevenlabsKey || '').trim();
+      if (!elevenKey || elevenKey.length < 10) {
+        openElevenLabsGateModal();
+        showToast('Please activate your ElevenLabs API Key to start the debate.', 'warning');
+        return;
+      }
+
+      const ideaA = elements.ideaInputA.value.trim();
+      const ideaB = elements.ideaInputB.value.trim();
+
+      if (!ideaA || !ideaB) {
+        showToast('Please provide both Perspective A and Perspective B.', 'warning');
+        return;
+      }
+
+      // UI Setup for Battle
+      state.isBattling = true;
+      state.currentRound = 1;
+      state.currentTurnIndex = 0;
+      state.transcript = [];
+      state.momentum = { alpha: 50, beta: 50 }; // Exactly 50/50 Balanced Starting
+
+      elements.scoreValAlpha.textContent = '50%';
+      elements.scoreValBeta.textContent = '50%';
+      elements.scoreBarAlpha.style.width = '50%';
+      elements.scoreBarBeta.style.width = '50%';
+
+      elements.labelAlphaIdea.textContent = ideaA;
+      elements.labelBetaIdea.textContent = ideaB;
+      elements.startBattleBtn.disabled = true;
+      elements.startBattleBtn.classList.add('opacity-50', 'cursor-not-allowed');
+      elements.resetBattleBtn.classList.remove('hidden');
+      elements.feedEmptyState.classList.add('hidden');
+      elements.transcriptFeed.innerHTML = '';
+      elements.verdictSection.classList.add('hidden');
+      elements.verdictContent.classList.add('hidden');
+      elements.battleStatusText.textContent = "IN COMBAT";
+      elements.battleStatusText.className = "text-[10px] uppercase font-bold tracking-widest text-rose-400 animate-pulse mt-2";
+
+      const langName = state.language.name;
+      const langNative = state.language.native;
+
+      showToast(`Commencing Battle in ${state.language.flag} ${langName} (${state.mode.toUpperCase()})`, 'info');
+
+      try {
+        const roundPlans = [
+          {
+            round: 1,
+            title: "Opening Clash",
+            alphaPrompt: `Deliver your opening thesis with fire, intellectual conviction, and persuasive vision. You are defending Perspective A: "${ideaA}". Defend it fiercely. Keep your speech strictly between 70 and 100 words.`,
+            betaPrompt: `Deliver your counter-argument. You are defending Perspective B: "${ideaB}". Challenge AI Alpha's core assumptions with empirical realism. Keep your speech strictly between 70 and 100 words.`
+          },
+          {
+            round: 2,
+            title: "Cross-Rebuttal",
+            alphaPrompt: `Counter-attack AI Beta's points directly. Expose the vulnerabilities and narrow worldview of their perspective. Keep your speech strictly between 70 and 100 words.`,
+            betaPrompt: `Deliver an incisive cross-examination. Pinpoint real-world failure modes and unintended consequences in Alpha's argument. Keep your speech strictly between 70 and 100 words.`
+          },
+          {
+            round: 3,
+            title: "Final Climax",
+            alphaPrompt: `Deliver your definitive closing manifesto. Summarize your worldview into an unforgettable statement. Keep your speech strictly between 70 and 100 words.`,
+            betaPrompt: `Deliver your ultimate closing statement. Frame the pragmatic reality and deliver the closing word. Keep your speech strictly between 70 and 100 words.`
+          }
+        ];
+
+        // 100% Balanced & Symmetric System Prompts
+        let baseSystemRule = `CRITICAL MANDATORY LANGUAGE INSTRUCTION:
+You MUST debate, argue, and speak EXCLUSIVELY in ${langName} (${langNative}).
+Do NOT use English or any other language unless the selected language is English.
+Maintain natural, eloquent phrasing native to ${langName}.
+Never use conversational filler or greetings.
+You and your opponent have EXACT EQUAL STATURE, EQUAL INTELLECT, and EQUAL WEIGHT in this arena. Speak fiercely, sharply, and persuasively.`;
+
+        if (state.language.code.startsWith('ar')) {
+          baseSystemRule += `\nتعليمات النطق الصوتي العربي الإلزامي:
+تحدث بلغة عربية فصحى نقية وراقية وبنبرة خطابية مقنعة. اضبط الكلمات الرئيسية والأفعال وأواخر الكلمات بحركات التشكيل (الفتحة، الضمة، الكسرة، الشدة، التنوين) لضمان سلامة النطق ومخارج الحروف الفصيحة بصوت بشري طبيعي وواضح 100%.`;
+        }
+
+        let debateHistoryAlpha = [
+          {
+            role: "system",
+            content: `You are AI Alpha (The Visionary Architect). You are debating in a high-stakes ideological arena defending Perspective A: "${ideaA}". Your rival is AI Beta who defends: "${ideaB}". Mode: ${state.mode}.\n${baseSystemRule}`
+          }
+        ];
+
+        let debateHistoryBeta = [
+          {
+            role: "system",
+            content: `You are AI Beta (The Empirical Strategist). You are debating in a high-stakes ideological arena defending Perspective B: "${ideaB}". Your rival is AI Alpha who defends: "${ideaA}". Mode: ${state.mode}.\n${baseSystemRule}`
+          }
+        ];
+
+        // Execute 3 Rounds
+        for (let r = 0; r < roundPlans.length; r++) {
+          const currentPlan = roundPlans[r];
+          state.currentRound = currentPlan.round;
+          elements.roundIndicatorNumber.textContent = currentPlan.round;
+
+          // ==============================
+          // TURN A: AI Alpha
+          // ==============================
+          state.currentTurnIndex++;
+          elements.turnCounterTag.textContent = `${state.currentTurnIndex} / ${state.totalTurns} Turns`;
+          updateMomentum('alpha', 6);
+
+          debateHistoryAlpha.push({
+            role: "user",
+            content: `[ROUND ${currentPlan.round}: ${currentPlan.title}] Instructions: ${currentPlan.alphaPrompt}`
+          });
+
+          const alphaSpeechText = await callGroqChat(debateHistoryAlpha, 0.72);
+          debateHistoryAlpha.push({ role: "assistant", content: alphaSpeechText });
+          debateHistoryBeta.push({ role: "user", content: `AI Alpha argues: "${alphaSpeechText}"` });
+
+          appendTranscriptCard('alpha', currentPlan.round, currentPlan.title, alphaSpeechText);
+          await speakText(alphaSpeechText, 'alpha');
+          await new Promise(res => setTimeout(res, 1200));
+
+          // ==============================
+          // TURN B: AI Beta
+          // ==============================
+          state.currentTurnIndex++;
+          elements.turnCounterTag.textContent = `${state.currentTurnIndex} / ${state.totalTurns} Turns`;
+          updateMomentum('beta', 6);
+
+          debateHistoryBeta.push({
+            role: "user",
+            content: `[ROUND ${currentPlan.round}: ${currentPlan.title}] Counter AI Alpha's argument. Instructions: ${currentPlan.betaPrompt}`
+          });
+
+          const betaSpeechText = await callGroqChat(debateHistoryBeta, 0.72);
+          debateHistoryBeta.push({ role: "assistant", content: betaSpeechText });
+          debateHistoryAlpha.push({ role: "user", content: `AI Beta counters: "${betaSpeechText}"` });
+
+          appendTranscriptCard('beta', currentPlan.round, currentPlan.title, betaSpeechText);
+          await speakText(betaSpeechText, 'beta');
+          await new Promise(res => setTimeout(res, 1500));
+        }
+
+        // ==============================
+        // 4. Impartial AI Referee Verdict
+        // ==============================
+        elements.roundIndicatorNumber.textContent = "🏆";
+        elements.battleStatusText.textContent = "VERDICT IN PROGRESS";
+        elements.battleStatusText.className = "text-[10px] uppercase font-bold tracking-widest text-amber-400 animate-pulse mt-2";
+        
+        await runAiRefereeVerdict(ideaA, ideaB);
+
+      } catch (error) {
+        console.error("Debate Execution Error:", error);
+        showToast(error.message, 'error');
+        elements.battleStatusText.textContent = "ERROR";
+        elements.battleStatusText.className = "text-[10px] uppercase font-bold tracking-widest text-rose-500 mt-2";
+      } finally {
+        state.isBattling = false;
+        elements.startBattleBtn.disabled = false;
+        elements.startBattleBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        updateSpeakerUiState('alpha', false);
+        updateSpeakerUiState('beta', false);
+      }
+    }
+
+    /**
+     * Symmetrical Momentum Updates
+     */
+    function updateMomentum(favored, delta) {
+      if (favored === 'alpha') {
+        state.momentum.alpha = Math.min(Math.max(state.momentum.alpha + delta, 35), 65);
+        state.momentum.beta = 100 - state.momentum.alpha;
+      } else {
+        state.momentum.beta = Math.min(Math.max(state.momentum.beta + delta, 35), 65);
+        state.momentum.alpha = 100 - state.momentum.beta;
+      }
+      elements.scoreValAlpha.textContent = `${state.momentum.alpha}%`;
+      elements.scoreValBeta.textContent = `${state.momentum.beta}%`;
+      elements.scoreBarAlpha.style.width = `${state.momentum.alpha}%`;
+      elements.scoreBarBeta.style.width = `${state.momentum.beta}%`;
+    }
+
+    /**
+     * Render Message Card to Transcript Feed
+     */
+    function appendTranscriptCard(speaker, round, roundTitle, text) {
+      state.transcript.push({ speaker, round, roundTitle, text, timestamp: new Date().toLocaleTimeString() });
+
+      const card = document.createElement('div');
+      card.className = "p-4 rounded-xl transition-all duration-300 " + 
+        (speaker === 'alpha' 
+          ? "bg-gradient-to-r from-rose-950/30 via-slate-900/60 to-slate-900/30 border-l-4 border-rose-500 border-y border-r border-slate-800" 
+          : "bg-gradient-to-l from-cyan-950/30 via-slate-900/60 to-slate-900/30 border-r-4 border-cyan-400 border-y border-l border-slate-800");
+
+      const isAlpha = speaker === 'alpha';
+      const speakerName = isAlpha ? "AI ALPHA" : "AI BETA";
+      const speakerColor = isAlpha ? "text-rose-400" : "text-cyan-400";
+      const badgeBg = isAlpha ? "bg-rose-500/10 text-rose-400 border-rose-500/20" : "bg-cyan-500/10 text-cyan-400 border-cyan-500/20";
+      const isRtl = state.language.rtl;
+
+      card.innerHTML = `
+        <div class="flex items-center justify-between gap-2 mb-2">
+          <div class="flex items-center space-x-2">
+            <span class="font-display font-bold text-xs ${speakerColor} tracking-wider">${speakerName}</span>
+            <span class="text-[10px] px-2 py-0.5 rounded-full border ${badgeBg} font-mono">Round ${round}: ${roundTitle}</span>
+          </div>
+          <div class="flex items-center space-x-2">
+            <span class="text-[10px] text-slate-500 font-mono">${new Date().toLocaleTimeString()}</span>
+            <button onclick="speakSingleText(this, '${escapeQuotes(text)}', '${speaker}')" title="Replay voice" class="p-1 rounded hover:bg-slate-800 text-slate-400 hover:text-slate-200 transition">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg>
+            </button>
+          </div>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-200 leading-relaxed font-normal ${isRtl ? 'text-right' : 'text-left'}" dir="${isRtl ? 'rtl' : 'ltr'}">${escapeHtml(text)}</p>
+      `;
+
+      elements.transcriptFeed.appendChild(card);
+      elements.transcriptFeed.scrollTo({
+        top: elements.transcriptFeed.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
+
+    function speakSingleText(btn, text, speaker) {
+      speakText(text, speaker);
+    }
+
+    /**
+     * AI Referee / Verdict Engine (Impartial & Localized)
+     */
+    async function runAiRefereeVerdict(ideaA, ideaB) {
+      elements.verdictSection.classList.remove('hidden');
+      elements.verdictLoading.classList.remove('hidden');
+      elements.verdictContent.classList.add('hidden');
+      elements.verdictSection.scrollIntoView({ behavior: 'smooth' });
+
+      const langName = state.language.name;
+      const langNative = state.language.native;
+
+      const refereeSystemPrompt = `You are the Supreme AI Arena Arbiter & Grand Referee. Impartially evaluate this 3-round debate transcript between AI Alpha (Perspective A: "${ideaA}") and AI Beta (Perspective B: "${ideaB}").
+Debate Mode: ${state.mode}.
+CRITICAL LANGUAGE INSTRUCTION:
+All text inside the JSON values (winnerTitle, decisiveMoment, fatalFlaw, verdictSummary, hybridConcept title and pillars) MUST BE WRITTEN IN ${langName} (${langNative}).
+Ensure 100% fair and balanced evaluation with ZERO bias toward either side.
+You MUST respond with ONLY a valid, parseable JSON object matching this exact schema:
+{
+  "winner": "AI Alpha" or "AI Beta" or "Hybrid Synthesis",
+  "winnerTitle": "Punchy 5-word title in ${langName}",
+  "alphaScores": { "logic": 88, "rhetoric": 90, "evidence": 85, "impact": 87, "total": 88 },
+  "betaScores": { "logic": 89, "rhetoric": 87, "evidence": 89, "impact": 86, "total": 88 },
+  "decisiveMoment": "Single sentence identifying the exact turning point in ${langName}.",
+  "fatalFlaw": "The fatal vulnerability in the opposing argument in ${langName}.",
+  "verdictSummary": "Authoritative 3-sentence master judgment summarizing the debate in ${langName}.",
+  "hybridConcept": {
+    "title": "Title for the breakthrough hybrid idea in ${langName}",
+    "pillars": [
+      "Pillar 1: Key actionable tenet in ${langName}",
+      "Pillar 2: Key actionable tenet in ${langName}",
+      "Pillar 3: Key actionable tenet in ${langName}"
+    ]
+  }
+}`;
+
+      const refereeMessages = [
+        { role: "system", content: refereeSystemPrompt },
+        { 
+          role: "user", 
+          content: `Here is the full 3-round debate transcript:\n${state.transcript.map(t => `${t.speaker.toUpperCase()} (Round ${t.round}): ${t.text}`).join('\n\n')}\n\nDeliver your impartial verdict JSON in ${langName} now.` 
+        }
+      ];
+
+      try {
+        const rawVerdict = await callGroqChat(refereeMessages, 0.3, true);
+        
+        let cleanedJson = rawVerdict.trim();
+        if (cleanedJson.startsWith('```json')) {
+          cleanedJson = cleanedJson.replace(/^```json/, '').replace(/```$/, '').trim();
+        } else if (cleanedJson.startsWith('```')) {
+          cleanedJson = cleanedJson.replace(/^```/, '').replace(/```$/, '').trim();
+        }
+
+        const verdict = JSON.parse(cleanedJson);
+        state.verdictData = verdict;
+
+        renderVerdictUi(verdict);
+        triggerVictoryConfetti();
+
+        if (verdict.verdictSummary) {
+          speakText(verdict.verdictSummary, 'judge');
+        }
+
+      } catch (err) {
+        console.error("Referee Error:", err);
+        const fallbackVerdict = {
+          winner: state.mode === 'synthesis' ? "Hybrid Synthesis" : (state.momentum.alpha > state.momentum.beta ? "AI Alpha" : "AI Beta"),
+          winnerTitle: state.mode === 'synthesis' ? "Dialectic Synthesis Triumph" : "Victory of Rhetorical Precision",
+          alphaScores: { logic: 87, rhetoric: 90, evidence: 85, impact: 88, total: 88 },
+          betaScores: { logic: 89, rhetoric: 86, evidence: 89, impact: 87, total: 88 },
+          decisiveMoment: "The clash reached its decisive peak in Round 2.",
+          fatalFlaw: "Unaddressed boundary conditions in pragmatic implementation.",
+          verdictSummary: "Both AI combatants exhibited world-class dialectic caliber. The battle remained balanced throughout all three rounds.",
+          hybridConcept: {
+            title: "The Balanced Hybrid Synthesis",
+            pillars: [
+              "Pillar 1: Integrate foundational ethical constraints.",
+              "Pillar 2: Accelerate automated operational capacity.",
+              "Pillar 3: Maintain empirical oversight."
+            ]
+          }
+        };
+        state.verdictData = fallbackVerdict;
+        renderVerdictUi(fallbackVerdict);
+      } finally {
+        elements.verdictLoading.classList.add('hidden');
+        elements.verdictContent.classList.remove('hidden');
+        elements.battleStatusText.textContent = "VERDICT DELIVERED";
+        elements.battleStatusText.className = "text-[10px] uppercase font-bold tracking-widest text-emerald-400 mt-2";
+      }
+    }
+
+    /**
+     * Render Verdict Metrics & Cards
+     */
+    function renderVerdictUi(verdict) {
+      elements.verdictTitle.textContent = verdict.winnerTitle || "SUPREME ARBITER VERDICT";
+
+      const isAlphaWinner = verdict.winner.includes("Alpha");
+      const isSynthesis = state.mode === 'synthesis' || verdict.winner.includes("Synthesis");
+      const isRtl = state.language.rtl;
+
+      if (isSynthesis) {
+        elements.spotlightBadgeIcon.textContent = "⚡";
+        elements.spotlightBadgeTag.textContent = "SYNTHESIS BREAKTHROUGH";
+        elements.spotlightBadgeTag.className = "text-[11px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30";
+        elements.spotlightWinnerName.textContent = "BALANCED HYBRID SYNTHESIS ACHIEVED";
+        elements.spotlightWinnerName.className = "font-display text-2xl font-black text-amber-300 mt-1";
+        
+        elements.hybridConceptContainer.classList.remove('hidden');
+        elements.hybridConceptTitle.textContent = verdict.hybridConcept?.title || "Harmonized Hybrid Solution";
+        
+        elements.hybridPillarsList.innerHTML = (verdict.hybridConcept?.pillars || [])
+          .map((p, idx) => `
+            <div class="p-3 rounded-lg bg-slate-950/80 border border-amber-500/20 text-slate-200 ${isRtl ? 'text-right' : 'text-left'}" dir="${isRtl ? 'rtl' : 'ltr'}">
+              <strong class="text-amber-400 block mb-0.5">Pillar ${idx + 1}</strong>
+              <p class="leading-tight text-slate-300">${p}</p>
+            </div>
+          `).join('');
+
+      } else if (isAlphaWinner) {
+        elements.spotlightBadgeIcon.textContent = "👑";
+        elements.spotlightBadgeTag.textContent = "DEATHMATCH VICTOR";
+        elements.spotlightBadgeTag.className = "text-[11px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30";
+        elements.spotlightWinnerName.textContent = "AI ALPHA WINS THE MATCH";
+        elements.spotlightWinnerName.className = "font-display text-2xl font-black text-rose-400 mt-1";
+        elements.hybridConceptContainer.classList.add('hidden');
+      } else {
+        elements.spotlightBadgeIcon.textContent = "👑";
+        elements.spotlightBadgeTag.textContent = "DEATHMATCH VICTOR";
+        elements.spotlightBadgeTag.className = "text-[11px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/30";
+        elements.spotlightWinnerName.textContent = "AI BETA WINS THE MATCH";
+        elements.spotlightWinnerName.className = "font-display text-2xl font-black text-cyan-400 mt-1";
+        elements.hybridConceptContainer.classList.add('hidden');
+      }
+
+      elements.spotlightSummaryText.textContent = verdict.verdictSummary;
+      elements.spotlightSummaryText.dir = isRtl ? 'rtl' : 'ltr';
+      elements.verdictAlphaFinalScore.textContent = verdict.alphaScores?.total || 88;
+      elements.verdictBetaFinalScore.textContent = verdict.betaScores?.total || 88;
+
+      elements.decisiveMomentText.textContent = verdict.decisiveMoment || "Round 2 cross-examination demonstrated decisive vulnerability.";
+      elements.decisiveMomentText.dir = isRtl ? 'rtl' : 'ltr';
+      elements.fatalFlawText.textContent = verdict.fatalFlaw || "Unaddressed boundary conditions in long-tail scenarios.";
+      elements.fatalFlawText.dir = isRtl ? 'rtl' : 'ltr';
+
+      const a = verdict.alphaScores || { logic: 88, rhetoric: 90, evidence: 85, impact: 87 };
+      const b = verdict.betaScores || { logic: 89, rhetoric: 87, evidence: 89, impact: 86 };
+
+      elements.metricLogicAlpha.textContent = `${a.logic}`;
+      elements.metricLogicBeta.textContent = `${b.logic}`;
+      elements.barLogicAlpha.style.width = `${(a.logic / (a.logic + b.logic)) * 100}%`;
+      elements.barLogicBeta.style.width = `${(b.logic / (a.logic + b.logic)) * 100}%`;
+
+      elements.metricRhetoricAlpha.textContent = `${a.rhetoric}`;
+      elements.metricRhetoricBeta.textContent = `${b.rhetoric}`;
+      elements.barRhetoricAlpha.style.width = `${(a.rhetoric / (a.rhetoric + b.rhetoric)) * 100}%`;
+      elements.barRhetoricBeta.style.width = `${(b.rhetoric / (a.rhetoric + b.rhetoric)) * 100}%`;
+
+      elements.metricEvidenceAlpha.textContent = `${a.evidence}`;
+      elements.metricEvidenceBeta.textContent = `${b.evidence}`;
+      elements.barEvidenceAlpha.style.width = `${(a.evidence / (a.evidence + b.evidence)) * 100}%`;
+      elements.barEvidenceBeta.style.width = `${(b.evidence / (a.evidence + b.evidence)) * 100}%`;
+
+      elements.metricImpactAlpha.textContent = `${a.impact}`;
+      elements.metricImpactBeta.textContent = `${b.impact}`;
+      elements.barImpactAlpha.style.width = `${(a.impact / (a.impact + b.impact)) * 100}%`;
+      elements.barImpactBeta.style.width = `${(b.impact / (a.impact + b.impact)) * 100}%`;
+    }
+
+    function speakVerdictSummary() {
+      if (state.verdictData && state.verdictData.verdictSummary) {
+        speakText(state.verdictData.verdictSummary, 'judge');
+      }
+    }
+
+    function startRematch() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      elements.verdictSection.classList.add('hidden');
+      elements.feedEmptyState.classList.remove('hidden');
+      elements.transcriptFeed.innerHTML = '';
+      elements.roundIndicatorNumber.textContent = '--';
+      elements.battleStatusText.textContent = "Standby";
+      elements.battleStatusText.className = "text-[10px] uppercase font-bold tracking-widest text-slate-500 mt-2";
+      elements.turnCounterTag.textContent = "0 / 6 Turns";
+      state.momentum = { alpha: 50, beta: 50 };
+      elements.scoreValAlpha.textContent = '50%';
+      elements.scoreValBeta.textContent = '50%';
+      elements.scoreBarAlpha.style.width = '50%';
+      elements.scoreBarBeta.style.width = '50%';
+    }
+
+    function resetBattleState() {
+      if ('speechSynthesis' in window) {
+        stopCurrentAudio();
+      }
+      state.isBattling = false;
+      startRematch();
+      elements.resetBattleBtn.classList.add('hidden');
+      showToast('Arena reset successfully', 'info');
+    }
+
+    function copyTranscript() {
+      if (state.transcript.length === 0) {
+        showToast('No transcript recorded yet.', 'warning');
+        return;
+      }
+      const text = state.transcript.map(t => `[${t.speaker.toUpperCase()} - Round ${t.round} (${t.roundTitle})]\n${t.text}`).join('\n\n');
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('Debate transcript copied to clipboard!', 'success');
+      });
+    }
+
+    function exportTranscript() {
+      if (state.transcript.length === 0) {
+        showToast('No transcript recorded yet.', 'warning');
+        return;
+      }
+      let md = `# AI Arena: The Ultimate Idea Battle Transcript\n\n`;
+      md += `**Date:** ${new Date().toLocaleString()}\n`;
+      md += `**Language:** ${state.language.name} (${state.language.native})\n`;
+      md += `**Mode:** ${state.mode.toUpperCase()}\n`;
+      md += `**Perspective A (AI Alpha):** ${elements.ideaInputA.value}\n`;
+      md += `**Perspective B (AI Beta):** ${elements.ideaInputB.value}\n\n`;
+      md += `## Debate Stream\n\n`;
+      state.transcript.forEach(t => {
+        md += `### ${t.speaker.toUpperCase()} &bull; Round ${t.round}: ${t.roundTitle} (${t.timestamp})\n`;
+        md += `${t.text}\n\n`;
+      });
+      if (state.verdictData) {
+        md += `## Supreme AI Arbiter Verdict\n\n`;
+        md += `**Winner / Outcome:** ${state.verdictData.winner}\n`;
+        md += `**Verdict:** ${state.verdictData.verdictSummary}\n`;
+        md += `**Decisive Moment:** ${state.verdictData.decisiveMoment}\n`;
+        md += `**Fatal Flaw:** ${state.verdictData.fatalFlaw}\n`;
+      }
+
+      const blob = new Blob([md], { type: 'text/markdown' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `AI-Arena-Debate-${state.language.code}-${Date.now()}.md`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('Transcript downloaded as Markdown!', 'success');
+    }
+
+    function openConfigModal() {
+      openElevenLabsGateModal();
+    }
+    function closeConfigModal() {
+      closeElevenLabsGateModal();
+    }
+    function toggleApiKeyVisibility() {}
+    function saveApiConfig() {}
+
+    function triggerVictoryConfetti() {
+      const canvas = elements.confettiCanvas;
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const particles = [];
+      const colors = ['#f43f5e', '#06b6d4', '#f59e0b', '#8b5cf6', '#10b981', '#ffffff'];
+
+      for (let i = 0; i < 140; i++) {
+        particles.push({
+          x: canvas.width / 2,
+          y: canvas.height / 2,
+          vx: (Math.random() - 0.5) * 18,
+          vy: (Math.random() - 0.7) * 20,
+          size: Math.random() * 8 + 4,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          rotation: Math.random() * 360,
+          rotationSpeed: (Math.random() - 0.5) * 10,
+          life: 1,
+          decay: Math.random() * 0.015 + 0.008
+        });
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let active = false;
+
+        particles.forEach(p => {
+          if (p.life > 0) {
+            active = true;
+            p.x += p.vx;
+            p.y += p.vy;
+            p.vy += 0.4;
+            p.rotation += p.rotationSpeed;
+            p.life -= p.decay;
+
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate((p.rotation * Math.PI) / 180);
+            ctx.fillStyle = p.color;
+            ctx.globalAlpha = Math.max(p.life, 0);
+            ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+            ctx.restore();
+          }
+        });
+
+        if (active) {
+          requestAnimationFrame(animate);
+        } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      
+      let borderCol = 'border-slate-700';
+      let iconColor = 'text-cyan-400';
+      if (type === 'success') { borderCol = 'border-emerald-500/50'; iconColor = 'text-emerald-400'; }
+      if (type === 'warning') { borderCol = 'border-amber-500/50'; iconColor = 'text-amber-400'; }
+      if (type === 'error') { borderCol = 'border-rose-500/50'; iconColor = 'text-rose-400'; }
+
+      toast.className = `glass-card border ${borderCol} p-3 rounded-xl shadow-2xl flex items-center space-x-2.5 text-xs text-slate-200 transition-all duration-300 transform translate-y-2 opacity-0 pointer-events-auto max-w-sm`;
+      toast.innerHTML = `
+        <span class="${iconColor}">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </span>
+        <span class="flex-1 leading-tight">${escapeHtml(message)}</span>
+      `;
+
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.classList.remove('translate-y-2', 'opacity-0');
+      }, 10);
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-x-4');
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+    function escapeQuotes(str) {
+      if (!str) return '';
+      return str.replace(/'/g, "\\'").replace(/"/g, '\\"').replace(/\n/g, ' ');
+    }
+  </script>
+</body>
+</html>
