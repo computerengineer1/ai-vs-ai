@@ -1433,7 +1433,7 @@
 
     // Default Configuration with user's provided key pre-filled
     const CONFIG = {
-      DEFAULT_GROQ_KEY: "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",
+      DEFAULT_GROQ_KEY: "",
       GROQ_ENDPOINT: "https://api.groq.com/openai/v1/chat/completions",
       DEFAULT_MODEL: "qwen/qwen3.8-27b",
       DEFAULT_FISH_KEY: "",
@@ -3187,8 +3187,15 @@
      * Groq API Direct Async Request with Auto-Fallback
      */
     async function callGroqChat(messages, temperature = 0.7, jsonMode = false) {
-      if (!state.apiKey) {
-        throw new Error("Missing Groq API Key! Please enter your key in the header configuration.");
+      if (!state.apiKey || !state.apiKey.trim()) {
+        const suppliedKey = window.prompt(
+          "Enter your Groq API key. It will be saved in this browser's localStorage on this device."
+        );
+        if (!suppliedKey || !suppliedKey.trim()) {
+          throw new Error("A Groq API key is required to generate the debate.");
+        }
+        state.apiKey = suppliedKey.trim();
+        localStorage.setItem(CONFIG.STORAGE_KEY, state.apiKey);
       }
 
       const requestPayload = {
